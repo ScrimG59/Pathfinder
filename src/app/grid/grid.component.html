@@ -1,9 +1,13 @@
-<div class="grid-container" *ngFor="let node of nodes; index as i;">
-    <div [ngClass]="{
-        'isStart': node.isStart,
-        'isEnd': node.isEnd,
-        'isWall': node.isWall,
-        'grid-item': true
-    }" id="node.id" (click)="toggleWall(node.id)">
-    </div>
+<button (click)="visualizeAlgorithm()">Click me!</button>
+<div class="grid-container">
+    <span *ngFor="let node of nodes; index as i;">
+        <div [ngClass]="{
+            'isStart': node.isStart,
+            'isEnd': node.isEnd,
+            'isWall': node.isWall,
+            'isVisited': node.isVisited,
+            'node': true
+        }" id="i" (click)="toggleWall(i)">
+        </div>
+    </span>
 </div>
