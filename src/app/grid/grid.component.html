@@ -1,0 +1,9 @@
+<div class="grid-container" *ngFor="let node of nodes; index as i;">
+    <div [ngClass]="{
+        'isStart': node.isStart,
+        'isEnd': node.isEnd,
+        'isWall': node.isWall,
+        'grid-item': true
+    }" id="node.id" (click)="toggleWall(node.id)">
+    </div>
+</div>

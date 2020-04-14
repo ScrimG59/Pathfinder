@@ -1,0 +1,26 @@
+.grid-container{
+    display: inline-grid;
+    row-gap: 0;
+    column-gap: 0;
+    border: black;
+}
+
+.grid-item{
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+    border: 1px groove white;
+    color: white;
+}
+
+.isStart{
+    background-color: red;
+}
+
+.isEnd{
+    background-color: green;
+}
+
+.isWall{
+    background-color: black;
+}
