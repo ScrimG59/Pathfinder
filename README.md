@@ -1,3 +1,3 @@
 # PathfindingVisualizer
 
-A simple web written in TypeScript (Angular) which visualizes popular pathfinding algorithms.
+A simple web app written in TypeScript (Angular) which visualizes popular pathfinding algorithms.
