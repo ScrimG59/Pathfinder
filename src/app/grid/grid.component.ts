@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../../models/dijkstra';
-import { visitAll } from '@angular/compiler';
 
 const GRID_NODES = [];
-var mouseIsPressed = false;
+let ALGORITHM = "nothing";
+let mouseIsPressed = false;
+let isRunning = false;
 
 @Component({
   selector: 'app-grid',
@@ -17,9 +18,14 @@ export class GridComponent implements OnInit {
   constructor() {}
 
   nodes = GRID_NODES;
+  algorithm = ALGORITHM;
 
   ngOnInit(): void {
     //generates the nodes for the grid
+    this.generateGrid();
+  }
+
+  generateGrid(){
     let index: number = 0;
     for(var row: number = 0; row <= 26; row++){
       console.log(row);
@@ -40,6 +46,20 @@ export class GridComponent implements OnInit {
     }
   }
 
+  checkAlgorithm(){
+    if(this.algorithm == 'nothing'){
+      document.getElementById('btn-visualize').textContent = "Pick an algortihm!"
+    }
+    else{
+      isRunning = true;
+      document.getElementById('btn-visualize').textContent = 'Visualizing...';
+      if(this.checkVisited()){
+        this.clearBoard();
+      }
+      this.visualizeAlgorithm();
+    }
+  }
+
   visualizeAlgorithm(){
     const startNode = this.nodes[764];
     const endNode = this.nodes[802];
@@ -49,34 +69,51 @@ export class GridComponent implements OnInit {
   }
 
   animateAlgorithm(visitedNodes: Node[], shortestPath: Node[]){
+    console.log()
     for(let i = 0; i <= visitedNodes.length; i++){
       if(i == visitedNodes.length){
         setTimeout(() => {
           console.log('[GRID] Shortest Path: ' + shortestPath.length);
           console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
           this.animateShortestPath(shortestPath);
-        }, i * 10);
+        }, i * 20);
         return;
       }
       setTimeout(() => {
-        visitedNodes[i].isActuallyVisited = true;
-      }, i * 10);
+        if(visitedNodes[i].isStart || visitedNodes[i].isEnd){}
+        else{
+          visitedNodes[i].isActuallyVisited = true;
+        }
+      }, i * 20);
     }
   }
 
   animateShortestPath(shortestPath: Node[]){
-    for(let i = 0; i < shortestPath.length; i++){
+    for(let i = 0; i <= shortestPath.length; i++){
       setTimeout(() => {
+        if(i == shortestPath.length){
+          this.algorithm = 'nothing';
+          isRunning = false;
+          setTimeout(() => {
+            document.getElementById('btn-visualize').textContent = 'Visualize!'
+          }, 1500);
+          document.getElementById('btn-visualize').textContent = 'Done!'
+          return;
+        }
         console.log('[ANIMATE_SHORTEST_PATH] Shortest Path: ' + shortestPath.length);
         console.log('[ANIMATE_SHORTEST_PATH]: ' + shortestPath[i].row + ' ' + shortestPath[i].column);
         shortestPath[i].isActuallyVisited = false;
-        shortestPath[i].isShortestPath = true;
+        if(shortestPath[i].isEnd){}
+        else {shortestPath[i].isShortestPath = true;}
       }, i * 50);
     }
   }
 
   toggleWall(index: number){
-    if(this.nodes[index].isStart || this.nodes[index].isEnd){}
+    if((this.nodes[index].isStart || this.nodes[index].isEnd) && isRunning){
+      console.log('Cannot toggle wall!');
+      return;
+    }
     else{
         this.nodes[index].isWall = !this.nodes[index].isWall;
     }
@@ -86,6 +123,7 @@ export class GridComponent implements OnInit {
   mouseDown(index: number){
     this.toggleWall(index);
     mouseIsPressed = true;
+    console.log('Mouse down');
   }
 
   mouseOver(index: number){
@@ -95,13 +133,40 @@ export class GridComponent implements OnInit {
 
   mouseUp(index: number){
     mouseIsPressed = false;
+    console.log('Mouse up');
   }
 
   clearWalls(){
+    if(isRunning)
+      return;
     for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].isWall){
+      if(this.nodes[i].isWall)
         this.nodes[i].isWall = false;
-      }
     }
+  }
+
+  clearBoard(){
+    if(isRunning)
+      return;
+    for(let i = 0; i < this.nodes.length; i++){
+      this.nodes[i].isWall = false;
+      this.nodes[i].isVisited = false;
+      this.nodes[i].isActuallyVisited = false;
+      this.nodes[i].isShortestPath = false;
+    }
+  }
+
+  setPathfindingAlgorithm(algorithm: string): void{
+    this.algorithm = algorithm;
+    document.getElementById('btn-visualize').textContent = `Visualize ${this.algorithm}!`;
+    console.log(this.algorithm);
+  }
+
+  checkVisited(){
+    for(let i = 0; i < this.nodes.length; i++){
+      if(this.nodes[i].isActuallyVisited)
+        return true;
+    }
+    return false;
   }
 }
