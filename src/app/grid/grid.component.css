@@ -14,11 +14,11 @@
 }
 
 .isStart{
-    background-color: green;
+    background-color: green !important;
 }
 
 .isEnd{
-    background-color: red;
+    background-color: red !important;
 }
 
 .isWall{
@@ -27,4 +27,8 @@
 
 .isVisited{
     background-color: blue;
+}
+
+.isShortestPath{
+    background-color: yellow;
 }

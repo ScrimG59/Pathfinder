@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../../models/dijkstra';
+import { visitAll } from '@angular/compiler';
 
 const GRID_NODES = [];
 
@@ -35,24 +36,19 @@ export class GridComponent implements OnInit {
         }
         index++;
       }
-      index++;
-    }
-    for(let i = 0; i < 1160; i++){
-      if(GRID_NODES[i].row == null || GRID_NODES[i].column == null){
-        console.log('NULL AT INDEX: ' + i);
-      }
-      else{console.log('Everything gucci!');}
     }
   }
 
   visualizeAlgorithm(){
-    console.log('Works!');
     const startNode = this.nodes[590];
-    console.log('COLUMN: ' + GRID_NODES[590].column + ' ROW: ' +  GRID_NODES[590].row);
     const endNode = this.nodes[628];
-    console.log('COLUMN: ' + GRID_NODES[628].column + ' ROW: ' +  GRID_NODES[628].row);
-    const visitedNodes = executeDijkstra(GRID_NODES, startNode, endNode);
+    const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
     const shortestPath = createShortestPath(endNode);
+    for(let i = 0; i < shortestPath.length; i++){
+      console.log('[SHORTEST PATH]:' + shortestPath[i].row + ' ' + shortestPath[i].column);
+    }
+    console.log('[GRID] Shortest Path: ' + shortestPath.length);
+    console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
     this.animateAlgorithm(visitedNodes, shortestPath);
   }
 
@@ -60,25 +56,57 @@ export class GridComponent implements OnInit {
     for(let i = 0; i <= visitedNodes.length; i++){
       if(i == visitedNodes.length){
         setTimeout(() => {
-          this.animateShortestPath(shortestPath);
+          console.log('[GRID] Shortest Path: ' + shortestPath.length);
+          console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
+          for(var j = 0; j < shortestPath.length; j++){
+              console.log('[ANIMATE_SHORTEST_PATH] Shortest Path: ' + shortestPath.length);
+              console.log('[ANIMATE_SHORTEST_PATH]: ' + shortestPath[j]);
+              shortestPath[j].isActuallyVisited = false;
+              shortestPath[j].isShortestPath = true;
+          }
         }, i * 10);
         return;
       }
       setTimeout(() => {
-        visitedNodes[i].isVisited = true;
-      }, 50 * i);
+        visitedNodes[i].isActuallyVisited = true;
+      }, i * 10);
     }
   }
 
   animateShortestPath(shortestPath: Node[]){
-
+    for(var i = 0; i < shortestPath.length; i++){
+      setTimeout(() => {
+        console.log('[ANIMATE_SHORTEST_PATH] Shortest Path: ' + shortestPath.length);
+        console.log('[ANIMATE_SHORTEST_PATH]: ' + shortestPath[i].row + ' ' + shortestPath[i].column);
+        shortestPath[i].isActuallyVisited = false;
+        shortestPath[i].isShortestPath = true;
+      }, i * 50);
+    }
   }
 
   toggleWall(index: number){
-    if(GRID_NODES[index].isStart || GRID_NODES[index].isEnd){}
+    if(this.nodes[index].isStart || this.nodes[index].isEnd){}
     else{
-      GRID_NODES[index].isWall = !GRID_NODES[index].isWall;
+        this.nodes[index].isWall = !this.nodes[index].isWall;
     }
-    console.log('COLUMN: ' + GRID_NODES[index].column + ' ROW: ' + GRID_NODES[index].row + ' INDEX: '+ index);
+    console.log('ROW: ' + this.nodes[index].row + ' COLUMN: ' + this.nodes[index].column + ' INDEX: '+ index);
   }
+
+  onDragStart(event: DragEvent, index: number){
+    this.toggleWall(index);
+  }
+
+  onDrag(event: DragEvent, index: number){
+    this.toggleWall(index);
+  }
+
+  onDragOver(event: DragEvent, index: number){
+    this.toggleWall(index);
+  }
+
+  onDragEnd(event: DragEvent, index: number){
+    this.toggleWall(index);
+  }
+
+
 }

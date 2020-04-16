@@ -1,33 +1,58 @@
 import {Node} from '../models/node';
 
     export function executeDijkstra(grid: Node[], startNode: Node, endNode: Node){
-        const visitedNodes = [];
-        var unvisitedNodes = [];
-        var currentNode = null;
+        let visitedNodes = [];
+        let unvisitedNodes = [];
         // initialize 
-        intialize(grid, visitedNodes, unvisitedNodes);
+        //initialize(grid, visitedNodes, unvisitedNodes);
+        for(let i: number = 0; i < grid.length; i++){
+            if(grid[i].isStart){
+                grid[i].distance = 0;
+            }
+            else{
+                grid[i].distance = Infinity;
+            }
+            grid[i].previousNode = null;
+        }
+        unvisitedNodes = getAll(grid);
+        console.log('unvisited nodes length: ' + unvisitedNodes.length);
         while(unvisitedNodes.length != 0){
+            unvisitedNodes.sort((a, b) => a.distance - b.distance);
             // get an array of unvisited nodes sorted according to the shortest distance
-            unvisitedNodes = getSortedNodes(unvisitedNodes);
+            console.log('unvisited nodes length [SORTED]: ' + unvisitedNodes.length);
             // currentNode is the node with shortest distance
-            currentNode = unvisitedNodes.shift();
-            console.log(currentNode.row + currentNode.column);
+            const currentNode = unvisitedNodes.shift();
+            console.log('current node: ' + currentNode.row + currentNode.column);
             // skip the walls
-            if(currentNode.isWall){continue;}
-            // distance == -1 means infinite, so there's a problem
-            if(currentNode.distance == -1){return visitedNodes;}
+            if(currentNode.isWall){
+                console.log('Its a wall');
+                continue;
+            }
+            // if distance is infinite, we are probably trapped in walls
+            if(currentNode.distance == Infinity){
+                console.log('WE GOT A PROBLEM');
+                return visitedNodes;}
             // set the current node's "isVisited"-property to true
-            currentNode.isVisited = true;
+            if(!currentNode.isStart && !currentNode.isEnd){
+                console.log('Normal Node');
+                currentNode.isVisited = true;
+            }
+            console.log('VISITED NODES LENGTH: ' + visitedNodes.push(currentNode));
+            console.log('UNVISITED NODES LENGTH: ' + unvisitedNodes.length);
             // push the current node into an array of already visited nodes
-            visitedNodes.push(currentNode);
+            if(currentNode.isEnd){
+                console.log('End node reached!!');
+                return visitedNodes;
+            }
             if(currentNode.id == endNode.id){
                 return visitedNodes;
             }
+            console.log('updating neighbors')
+            updateUnvisitedNeighbors(grid, currentNode);
         }
-        updateUnvisitedNeighbors(grid, currentNode);
     }
 
-    function intialize(grid: Node[], visitedNodes: Node[], unvisitedNodes: Node[]): void{
+    function initialize(grid: Node[], visitedNodes: Node[], unvisitedNodes: Node[]): void{
         for(let i: number = 0; i < grid.length; i++){
             if(grid[i].isStart){
                 grid[i].distance = 0;
@@ -49,19 +74,24 @@ import {Node} from '../models/node';
         const row = currentNode.row;
         // get the node above
         if(row > 0){
-            neighbors.push(grid[(row+1)*(column+1)]);
+            var index = 
+            neighbors.push(grid[currentNode.id - 58]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
         // get the node below
-        if(row < grid.length - 1){
-            neighbors.push(grid[(row+1)*(column+1)+(2*58)]);
+        if(row < 20){
+            neighbors.push(grid[currentNode.id + 58]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
         // get the node on the left
         if(column > 0){
-            neighbors.push(grid[(2*58)+(column-1)]);
+            neighbors.push(grid[currentNode.id - 1]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
         // get the node on the right
-        if(column < 57){
-            neighbors.push(grid[(2*58)+(column-1)]);
+        if(column < 58){
+            neighbors.push(grid[currentNode.id + 1]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
         
         // only return the neighbors that weren't visited yet
@@ -104,7 +134,9 @@ import {Node} from '../models/node';
             // add the current node to the array of nodes for the shortest path
             shortestPath.unshift(currentNode);
             // then set current node to the current node's previous node ==> Backtracking
+            if(currentNode.previousNode.isStart){break;}
             currentNode = currentNode.previousNode;
         }
+        console.log('[DIJKSTRA] LENGTH: ' + shortestPath.length);
         return shortestPath;
     }

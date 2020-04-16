@@ -5,9 +5,14 @@
             'isStart': node.isStart,
             'isEnd': node.isEnd,
             'isWall': node.isWall,
-            'isVisited': node.isVisited,
+            'isVisited': node.isActuallyVisited,
+            'isShortestPath': node.isShortestPath,
             'node': true
-        }" id="i" (click)="toggleWall(i)">
+        }" id="i" (click)="toggleWall(i)"
+        (dragstart)="onDragStart($event, i)"
+        (drag)="onDrag($event, i)"
+        (dragover)="onDrag($event, i)"
+        (dragend)="onDragEnd($event, i)">
         </div>
     </span>
 </div>

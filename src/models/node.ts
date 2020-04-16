@@ -10,6 +10,8 @@ export class Node{
     row: number;
     column: number;
     previousNode: Node;
+    isShortestPath: boolean;
+    isActuallyVisited: boolean;
 
     constructor(id: number, isStart: boolean, isEnd: boolean, isWall: boolean, isVisited: boolean, row: number, column: number){
         this.id = id;
@@ -20,5 +22,7 @@ export class Node{
         this.row = row;
         this.column = column;
         this.previousNode = null;
+        this.isShortestPath = false;
+        this.isActuallyVisited = false;
     }
 }
