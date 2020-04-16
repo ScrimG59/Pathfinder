@@ -14,21 +14,21 @@ var mouseIsPressed = false;
 
 export class GridComponent implements OnInit {
   
-  constructor() { }
+  constructor() {}
 
   nodes = GRID_NODES;
 
   ngOnInit(): void {
     //generates the nodes for the grid
     let index: number = 0;
-    for(var row: number = 0; row <= 20; row++){
+    for(var row: number = 0; row <= 26; row++){
       console.log(row);
       for(var column: number = 0; column < 58; column++){
-        if(row == 10 && column == 10){
+        if(row == 13 && column == 10){
           GRID_NODES.push(new Node(index, true, false, false, false, row, column));
           console.log('Start Index: ' + index);
         }
-        else if(row == 10 && column == 48){
+        else if(row == 13 && column == 48){
           GRID_NODES.push(new Node(index, false, true, false, false, row, column));
           console.log('End Index: ' + index);
         }
@@ -41,15 +41,10 @@ export class GridComponent implements OnInit {
   }
 
   visualizeAlgorithm(){
-    const startNode = this.nodes[590];
-    const endNode = this.nodes[628];
+    const startNode = this.nodes[764];
+    const endNode = this.nodes[802];
     const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
     const shortestPath = createShortestPath(endNode);
-    for(let i = 0; i < shortestPath.length; i++){
-      console.log('[SHORTEST PATH]:' + shortestPath[i].row + ' ' + shortestPath[i].column);
-    }
-    console.log('[GRID] Shortest Path: ' + shortestPath.length);
-    console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
     this.animateAlgorithm(visitedNodes, shortestPath);
   }
 
@@ -59,12 +54,7 @@ export class GridComponent implements OnInit {
         setTimeout(() => {
           console.log('[GRID] Shortest Path: ' + shortestPath.length);
           console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
-          for(var j = 0; j < shortestPath.length; j++){
-              console.log('[ANIMATE_SHORTEST_PATH] Shortest Path: ' + shortestPath.length);
-              console.log('[ANIMATE_SHORTEST_PATH]: ' + shortestPath[j]);
-              shortestPath[j].isActuallyVisited = false;
-              shortestPath[j].isShortestPath = true;
-          }
+          this.animateShortestPath(shortestPath);
         }, i * 10);
         return;
       }
@@ -75,7 +65,7 @@ export class GridComponent implements OnInit {
   }
 
   animateShortestPath(shortestPath: Node[]){
-    for(var i = 0; i < shortestPath.length; i++){
+    for(let i = 0; i < shortestPath.length; i++){
       setTimeout(() => {
         console.log('[ANIMATE_SHORTEST_PATH] Shortest Path: ' + shortestPath.length);
         console.log('[ANIMATE_SHORTEST_PATH]: ' + shortestPath[i].row + ' ' + shortestPath[i].column);
@@ -105,5 +95,13 @@ export class GridComponent implements OnInit {
 
   mouseUp(index: number){
     mouseIsPressed = false;
+  }
+
+  clearWalls(){
+    for(let i = 0; i < this.nodes.length; i++){
+      if(this.nodes[i].isWall){
+        this.nodes[i].isWall = false;
+      }
+    }
   }
 }

@@ -17,12 +17,10 @@ import {Node} from '../models/node';
         unvisitedNodes = getAll(grid);
         console.log('unvisited nodes length: ' + unvisitedNodes.length);
         while(unvisitedNodes.length != 0){
-            unvisitedNodes.sort((a, b) => a.distance - b.distance);
             // get an array of unvisited nodes sorted according to the shortest distance
-            console.log('unvisited nodes length [SORTED]: ' + unvisitedNodes.length);
+            unvisitedNodes.sort((a, b) => a.distance - b.distance);
             // currentNode is the node with shortest distance
             const currentNode = unvisitedNodes.shift();
-            console.log('current node: ' + currentNode.row + currentNode.column);
             // skip the walls
             if(currentNode.isWall){
                 console.log('Its a wall');
@@ -30,15 +28,14 @@ import {Node} from '../models/node';
             }
             // if distance is infinite, we are probably trapped in walls
             if(currentNode.distance == Infinity){
-                console.log('WE GOT A PROBLEM');
-                return visitedNodes;}
+                console.log('WE GOT A PROBLEM!');
+                return visitedNodes;
+            }
             // set the current node's "isVisited"-property to true
             if(!currentNode.isStart && !currentNode.isEnd){
-                console.log('Normal Node');
                 currentNode.isVisited = true;
             }
-            console.log('VISITED NODES LENGTH: ' + visitedNodes.push(currentNode));
-            console.log('UNVISITED NODES LENGTH: ' + unvisitedNodes.length);
+            visitedNodes.push(currentNode);
             // push the current node into an array of already visited nodes
             if(currentNode.isEnd){
                 console.log('End node reached!!');
@@ -79,7 +76,7 @@ import {Node} from '../models/node';
             console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
         // get the node below
-        if(row < 20){
+        if(row < 26){
             neighbors.push(grid[currentNode.id + 58]);
             console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
@@ -108,12 +105,6 @@ import {Node} from '../models/node';
             node.distance = currentNode.distance + 1;
             node.previousNode = currentNode;
         });
-    }
-
-    function getSortedNodes(unvisitedNodes: Node[]): Node[]{
-        // gets all the the unvisited nodes, sorted according to the shortest distance
-        unvisitedNodes.sort((a, b) => a.distance - b.distance)
-        return unvisitedNodes;
     }
 
     function getAll(grid: Node[]): Node[]{
