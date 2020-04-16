@@ -9,10 +9,9 @@
             'isShortestPath': node.isShortestPath,
             'node': true
         }" id="i" (click)="toggleWall(i)"
-        (dragstart)="onDragStart($event, i)"
-        (drag)="onDrag($event, i)"
-        (dragover)="onDrag($event, i)"
-        (dragend)="onDragEnd($event, i)">
+        (mousedown)="mouseDown(i)"
+        (mouseover)="mouseOver(i)"
+        (mouseup)="mouseUp(i)">
         </div>
     </span>
 </div>

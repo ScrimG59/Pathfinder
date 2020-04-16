@@ -89,7 +89,7 @@ import {Node} from '../models/node';
             console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }
         // get the node on the right
-        if(column < 58){
+        if(column < 57){
             neighbors.push(grid[currentNode.id + 1]);
             console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
         }

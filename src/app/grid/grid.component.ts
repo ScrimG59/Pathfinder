@@ -4,6 +4,7 @@ import {executeDijkstra, createShortestPath} from '../../models/dijkstra';
 import { visitAll } from '@angular/compiler';
 
 const GRID_NODES = [];
+var mouseIsPressed = false;
 
 @Component({
   selector: 'app-grid',
@@ -92,21 +93,17 @@ export class GridComponent implements OnInit {
     console.log('ROW: ' + this.nodes[index].row + ' COLUMN: ' + this.nodes[index].column + ' INDEX: '+ index);
   }
 
-  onDragStart(event: DragEvent, index: number){
+  mouseDown(index: number){
     this.toggleWall(index);
+    mouseIsPressed = true;
   }
 
-  onDrag(event: DragEvent, index: number){
-    this.toggleWall(index);
+  mouseOver(index: number){
+    if(mouseIsPressed)
+      this.toggleWall(index);
   }
 
-  onDragOver(event: DragEvent, index: number){
-    this.toggleWall(index);
+  mouseUp(index: number){
+    mouseIsPressed = false;
   }
-
-  onDragEnd(event: DragEvent, index: number){
-    this.toggleWall(index);
-  }
-
-
 }
