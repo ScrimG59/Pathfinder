@@ -47,15 +47,18 @@ export class GridComponent implements OnInit {
   }
 
   checkAlgorithm(){
+    if(isRunning) return;
     if(this.algorithm == 'nothing'){
       document.getElementById('btn-visualize').textContent = "Pick an algortihm!"
     }
     else{
-      isRunning = true;
       document.getElementById('btn-visualize').textContent = 'Visualizing...';
+      document.getElementById('btn-visualize').style.backgroundColor = '#ff0000';
       if(this.checkVisited()){
         this.clearBoard();
+        console.log('Clearing board...');
       }
+      isRunning = true;
       this.visualizeAlgorithm();
     }
   }
@@ -94,41 +97,60 @@ export class GridComponent implements OnInit {
         if(i == shortestPath.length){
           this.algorithm = 'nothing';
           isRunning = false;
+          document.getElementById('btn-visualize').style.backgroundColor = '#0398f4';
           setTimeout(() => {
             document.getElementById('btn-visualize').textContent = 'Visualize!'
           }, 1500);
           document.getElementById('btn-visualize').textContent = 'Done!'
           return;
         }
-        console.log('[ANIMATE_SHORTEST_PATH] Shortest Path: ' + shortestPath.length);
         console.log('[ANIMATE_SHORTEST_PATH]: ' + shortestPath[i].row + ' ' + shortestPath[i].column);
         shortestPath[i].isActuallyVisited = false;
         if(shortestPath[i].isEnd){}
         else {shortestPath[i].isShortestPath = true;}
-      }, i * 50);
+      }, i * 40);
     }
   }
 
   toggleWall(index: number){
-    if((this.nodes[index].isStart || this.nodes[index].isEnd) && isRunning){
+    if((this.nodes[index].isStart || this.nodes[index].isEnd)){
       console.log('Cannot toggle wall!');
       return;
     }
+    else if(isRunning){}
     else{
         this.nodes[index].isWall = !this.nodes[index].isWall;
     }
     console.log('ROW: ' + this.nodes[index].row + ' COLUMN: ' + this.nodes[index].column + ' INDEX: '+ index);
   }
 
+  toggleStart(index: number){
+    for(let i = 0; i < this.nodes.length; i++){
+      if(this.nodes[i].isStart){
+        this.nodes[i].isStart = false;
+      }
+    }
+    this.nodes[index].isStart = true;
+  }
+
+  toggleEnd(index: number){
+    for(let i = 0; i < this.nodes.length; i++){
+      if(this.nodes[i].isEnd){
+        this.nodes[i].isEnd = false;
+      }
+    }
+    this.nodes[index].isEnd = true;
+  }
+
   mouseDown(index: number){
-    this.toggleWall(index);
     mouseIsPressed = true;
     console.log('Mouse down');
   }
 
   mouseOver(index: number){
-    if(mouseIsPressed)
+    if(mouseIsPressed){
       this.toggleWall(index);
+    }
   }
 
   mouseUp(index: number){
