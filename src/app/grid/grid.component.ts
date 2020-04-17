@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Node} from '../../models/node';
-import {executeDijkstra, createShortestPath} from '../../models/dijkstra';
+import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
 
 const GRID_NODES = [];
 let ALGORITHM = "nothing";

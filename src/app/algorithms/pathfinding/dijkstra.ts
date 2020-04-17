@@ -1,4 +1,4 @@
-import {Node} from '../models/node';
+import {Node} from '../../../models/node';
 
     export function executeDijkstra(grid: Node[], startNode: Node, endNode: Node){
         let visitedNodes = [];
