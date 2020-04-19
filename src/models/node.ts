@@ -7,9 +7,16 @@ export class Node{
     isWall: boolean;
     isVisited: boolean;
     distance: number;
+    //###########
+    // for astar algo
+    f: number;
+    g: number;
+    h: number;
+    closed: boolean;
+    //############
     row: number;
     column: number;
-    previousNode: Node;
+    parentNode: Node;
     isShortestPath: boolean;
     isActuallyVisited: boolean;
 
@@ -21,8 +28,9 @@ export class Node{
         this.isVisited = isVisited;
         this.row = row;
         this.column = column;
-        this.previousNode = null;
+        this.parentNode = null;
         this.isShortestPath = false;
         this.isActuallyVisited = false;
+        this.closed = false;
     }
 }

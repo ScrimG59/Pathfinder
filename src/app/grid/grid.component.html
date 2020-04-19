@@ -9,6 +9,7 @@
                     <div class="dropdown-content">
                         <a (click)="setPathfindingAlgorithm('Dijkstra')" href="#">Dijkstra</a>
                         <a (click)="setPathfindingAlgorithm('A*')" href="#">A*</a>
+                        <a (click)="setPathfindingAlgorithm('Experimental')" href="#">Experimental Dijkstra</a>
                     </div>
                 </div>
             </li>
@@ -21,7 +22,6 @@
                     </div>
                 </div>
             </li>
-            <li class="addBomb"><button class="btn-addBomb">Add Bomb</button></li>
             <li class="visualize"><button id="btn-visualize" (click)="checkAlgorithm()" class="btn-visualize">Visualize!</button></li>
             <li class="clearBoard"><button (click)="clearBoard()" class="btn-clearBoard">Clear Board</button></li>
             <li class="clearWalls"><button (click)="clearWalls()" class="btn-clearWalls">Clear Walls</button></li>

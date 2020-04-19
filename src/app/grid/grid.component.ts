@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
+import { aStar, retraceShortestPath } from '../algorithms/pathfinding/astar';
+import { executeExperimental } from '../algorithms/pathfinding/dijkstraexperimental';
 
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
@@ -54,9 +56,8 @@ export class GridComponent implements OnInit {
     else{
       document.getElementById('btn-visualize').textContent = 'Visualizing...';
       document.getElementById('btn-visualize').style.backgroundColor = '#ff0000';
-      if(this.checkVisited()){
-        this.clearBoard();
-        console.log('Clearing board...');
+      if(this.checkVisited() || this.checkClosed()){
+        this.clearVisitedNodes();
       }
       isRunning = true;
       this.visualizeAlgorithm();
@@ -64,15 +65,30 @@ export class GridComponent implements OnInit {
   }
 
   visualizeAlgorithm(){
-    const startNode = this.nodes[764];
-    const endNode = this.nodes[802];
-    const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
-    const shortestPath = createShortestPath(endNode);
-    this.animateAlgorithm(visitedNodes, shortestPath);
+    if(this.algorithm == 'Dijkstra'){
+      const startNode = this.nodes[764];
+      const endNode = this.nodes[802];
+      const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
+      const shortestPath = createShortestPath(endNode);
+      this.animateAlgorithm(visitedNodes, shortestPath);
+    }
+    else if(this.algorithm == 'A*'){
+      const startNode = this.nodes[764];
+      const endNode = this.nodes[802];
+      const visitedNodes = aStar(this.nodes, startNode, endNode, 'euklidean');
+      const shortestPath = retraceShortestPath(endNode);
+      this.animateAlgorithm(visitedNodes, shortestPath);
+    }
+    else if(this.algorithm == 'Experimental'){
+      const startNode = this.nodes[764];
+      const endNode = this.nodes[802];
+      const visitedNodes = executeExperimental(this.nodes, startNode, endNode);
+      const shortestPath = createShortestPath(endNode);
+      this.animateAlgorithm(visitedNodes, shortestPath);
+    }
   }
 
-  animateAlgorithm(visitedNodes: Node[], shortestPath: Node[]){
-    console.log()
+  animateAlgorithm(visitedNodes: Node[], shortestPath?: Node[]){
     for(let i = 0; i <= visitedNodes.length; i++){
       if(i == visitedNodes.length){
         setTimeout(() => {
@@ -178,6 +194,19 @@ export class GridComponent implements OnInit {
     }
   }
 
+  clearVisitedNodes(){
+    if(isRunning)
+      return;
+    for(let i = 0; i < this.nodes.length; i++){
+      if(this.nodes[i].isActuallyVisited || this.nodes[i].isVisited || this.nodes[i].closed){
+        this.nodes[i].isVisited = false;
+        this.nodes[i].isActuallyVisited = false;
+        this.nodes[i].isShortestPath = false;
+        this.nodes[i].closed = false;
+      }
+    }
+  }
+
   setPathfindingAlgorithm(algorithm: string): void{
     this.algorithm = algorithm;
     document.getElementById('btn-visualize').textContent = `Visualize ${this.algorithm}!`;
@@ -188,6 +217,15 @@ export class GridComponent implements OnInit {
     for(let i = 0; i < this.nodes.length; i++){
       if(this.nodes[i].isActuallyVisited)
         return true;
+    }
+    return false;
+  }
+
+  checkClosed(){
+    for(let i = 0; i < this.nodes.length; i++){
+      if(this.nodes[i].closed){
+        return true;
+      }
     }
     return false;
   }

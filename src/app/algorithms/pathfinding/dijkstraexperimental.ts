@@ -1,6 +1,6 @@
 import {Node} from '../../../models/node';
 
-    export function executeDijkstra(grid: Node[], startNode: Node, endNode: Node){
+    export function executeExperimental(grid: Node[], startNode: Node, endNode: Node){
         let visitedNodes = [];
         let unvisitedNodes = [];
         // initialize 
@@ -8,9 +8,11 @@ import {Node} from '../../../models/node';
         for(let i: number = 0; i < grid.length; i++){
             if(grid[i].isStart){
                 grid[i].distance = 0;
+                grid[i].h = getHeuristicDistance(grid[i], endNode);
             }
             else{
                 grid[i].distance = Infinity;
+                grid[i].h = getHeuristicDistance(grid[i], endNode);
             }
             grid[i].parentNode = null;
         }
@@ -49,18 +51,10 @@ import {Node} from '../../../models/node';
         }
     }
 
-    function initialize(grid: Node[], visitedNodes: Node[], unvisitedNodes: Node[]): void{
-        for(let i: number = 0; i < grid.length; i++){
-            if(grid[i].isStart){
-                grid[i].distance = 0;
-            }
-            else{
-                grid[i].distance = -1;
-            }
-            grid[i].parentNode = null;
-            visitedNodes[i] = null;
-        }
-        unvisitedNodes = getAll(grid);
+    function getHeuristicDistance(currentNode: Node, endNode: Node): number{
+        const result = Math.sqrt(Math.pow((currentNode.row - endNode.row), 2) + Math.pow((currentNode.column - endNode.column), 2));
+        console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
+        return result;
     }
 
     function getUnvisitedNeighbors(grid: Node[], currentNode: Node): Node[]{
@@ -102,7 +96,7 @@ import {Node} from '../../../models/node';
         // +1 because the distance between the current node and the neighbor is 1
         // also set the neighbors "previousNode"-property to the current node
         unvisitedNeighbors.forEach(node => {
-            node.distance = currentNode.distance + 1;
+            node.distance = currentNode.distance + node.h + 1;
             node.parentNode = currentNode;
         });
     }

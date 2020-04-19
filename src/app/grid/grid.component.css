@@ -22,7 +22,13 @@ header::after{
   float: left;
   margin-left: -180px;
   margin-top: 5px;
+  margin-right: 100px;
   color: white;
+  cursor: default;
+}
+
+.title:hover{
+  color: #0398f4;
 }
 
 nav ul{
@@ -41,13 +47,6 @@ nav li{
 }
 
 .maze{
-  margin-right: -50px;
-}
-
-.btn-addBomb{
-  background-color: transparent;
-  border: none;
-  color: white;
   margin-right: 50px;
 }
 
@@ -77,7 +76,7 @@ button:hover{
 }
 
 .clearBoard{
-  margin-right: -30px;
+  margin-right: -25px;
 }
 
 .dropbtn{
