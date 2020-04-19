@@ -1,20 +1,22 @@
 import {Node} from '../../../models/node';
 
-    export function executeExperimental(grid: Node[], startNode: Node, endNode: Node){
+    export function executeExperimental(grid: Node[][], startNode: Node, endNode: Node){
         let visitedNodes = [];
         let unvisitedNodes = [];
         // initialize 
         //initialize(grid, visitedNodes, unvisitedNodes);
         for(let i: number = 0; i < grid.length; i++){
-            if(grid[i].isStart){
-                grid[i].distance = 0;
-                grid[i].h = getHeuristicDistance(grid[i], endNode);
+            for(let j = 0; j < grid[i].length; j++){
+                if(grid[i][j].isStart){
+                    grid[i][j].distance = 0;
+                    grid[i][j].h = getHeuristicDistance(grid[i][j], endNode);
+                }
+                else{
+                    grid[i][j].distance = Infinity;
+                    grid[i][j].h = getHeuristicDistance(grid[i][j], endNode);
+                }
+                grid[i][j].parentNode = null;
             }
-            else{
-                grid[i].distance = Infinity;
-                grid[i].h = getHeuristicDistance(grid[i], endNode);
-            }
-            grid[i].parentNode = null;
         }
         unvisitedNodes = getAll(grid);
         console.log('unvisited nodes length: ' + unvisitedNodes.length);
@@ -51,45 +53,24 @@ import {Node} from '../../../models/node';
         }
     }
 
+    export function getAll(grid: Node[][]): Node[]{
+        const nodes = [];
+        // gets all nodes of the given grid
+        for(let i = 0; i < grid.length; i++){
+            for(let j = 0; j < grid[i].length; j++){
+                nodes.push(grid[i][j]);
+            }
+        }
+        return nodes;
+    }
+
     function getHeuristicDistance(currentNode: Node, endNode: Node): number{
         const result = Math.sqrt(Math.pow((currentNode.row - endNode.row), 2) + Math.pow((currentNode.column - endNode.column), 2));
         console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
         return result;
     }
 
-    function getUnvisitedNeighbors(grid: Node[], currentNode: Node): Node[]{
-        const neighbors = [];
-        // get the column and row from the current node
-        console.log('[DIJKSTRA]: CurrentNode: ' + currentNode.row + ' ' + currentNode.column);
-        const column = currentNode.column;
-        const row = currentNode.row;
-        // get the node above
-        if(row > 0){
-            var index = 
-            neighbors.push(grid[currentNode.id - 58]);
-            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
-        }
-        // get the node below
-        if(row < 26){
-            neighbors.push(grid[currentNode.id + 58]);
-            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
-        }
-        // get the node on the left
-        if(column > 0){
-            neighbors.push(grid[currentNode.id - 1]);
-            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
-        }
-        // get the node on the right
-        if(column < 57){
-            neighbors.push(grid[currentNode.id + 1]);
-            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column);
-        }
-        
-        // only return the neighbors that weren't visited yet
-        return neighbors.filter(neighbor => !neighbor.isVisited);
-    }
-
-    function updateUnvisitedNeighbors(grid: Node[], currentNode: Node): void{
+    function updateUnvisitedNeighbors(grid: Node[][], currentNode: Node): void{
         // get all unvisited neighbors of the current node
         const unvisitedNeighbors = getUnvisitedNeighbors(grid, currentNode);
         // for each unvisited neighbor set the distance to the current node's distance + 1
@@ -101,13 +82,35 @@ import {Node} from '../../../models/node';
         });
     }
 
-    function getAll(grid: Node[]): Node[]{
-        const nodes = [];
-        // gets all nodes of the given grid
-        for(const node of grid){
-            nodes.push(node);
+    export function getUnvisitedNeighbors(grid: Node[][], currentNode: Node): Node[]{
+        const neighbors = [];
+        // get the column and row from the current node
+        console.log('[A*]: CurrentNode: ' + currentNode.row + ' ' + currentNode.column);
+        const column = currentNode.column;
+        const row = currentNode.row;
+        // get the node above
+        if(row > 0){
+            var index = 
+            neighbors.push(grid[row - 1][column]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
         }
-        return nodes;
+        // get the node below
+        if(row < 26){
+            neighbors.push(grid[row + 1][column]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
+        }
+        // get the node on the left
+        if(column > 0){
+            neighbors.push(grid[row][column - 1]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
+        }
+        // get the node on the right
+        if(column < 68){
+            neighbors.push(grid[row][column + 1]);
+            console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
+        }
+        // only return the neighbors that weren't visited yet
+        return neighbors.filter(neighbor => !neighbor.isVisited);
     }
 
     export function createShortestPath(endNode: Node): Node[]{

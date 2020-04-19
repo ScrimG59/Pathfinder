@@ -1,18 +1,18 @@
 import { Node } from '../../../models/node';
 
-export function aStar(grid: Node[], startNode: Node, endNode: Node, heuristic: string){
+export function aStar(grid: Node[][], startNode: Node, endNode: Node, heuristic: string){
     // intialize
     let openList = [];
     let closedList = [];
     for(let i = 0; i < grid.length; i++){
-            grid[i].f = 0;
-            grid[i].g = 0;
-            grid[i].h = 0;
-            grid[i].parentNode = null;
+        for(let j = 0; j < grid[i].length; j++){
+            grid[i][j].f = 0;
+            grid[i][j].g = 0;
+            grid[i][j].h = 0;
+            grid[i][j].parentNode = null;
+        }
     }
-
     openList.push(startNode);
-
     while(openList.length != 0){
         let indexOfLowestF = 0;
         for(let i = 0; i < openList.length; i++){
@@ -79,7 +79,7 @@ export function aStar(grid: Node[], startNode: Node, endNode: Node, heuristic: s
     return [];
 }
 
-function getNeighbors(grid: Node[], currentNode: Node): Node[]{
+function getNeighbors(grid: Node[][], currentNode: Node): Node[]{
     const neighbors = [];
     // get the column and row from the current node
     console.log('[A*]: CurrentNode: ' + currentNode.row + ' ' + currentNode.column);
@@ -88,22 +88,22 @@ function getNeighbors(grid: Node[], currentNode: Node): Node[]{
     // get the node above
     if(row > 0){
         var index = 
-        neighbors.push(grid[currentNode.id - 58]);
+        neighbors.push(grid[row - 1][column]);
         console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
     }
     // get the node below
     if(row < 26){
-        neighbors.push(grid[currentNode.id + 58]);
+        neighbors.push(grid[row + 1][column]);
         console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
     }
     // get the node on the left
     if(column > 0){
-        neighbors.push(grid[currentNode.id - 1]);
+        neighbors.push(grid[row][column - 1]);
         console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
     }
     // get the node on the right
-    if(column < 57){
-        neighbors.push(grid[currentNode.id + 1]);
+    if(column < 68){
+        neighbors.push(grid[row][column + 1]);
         console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
     }
     

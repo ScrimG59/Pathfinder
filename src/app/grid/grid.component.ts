@@ -3,6 +3,7 @@ import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
 import { aStar, retraceShortestPath } from '../algorithms/pathfinding/astar';
 import { executeExperimental } from '../algorithms/pathfinding/dijkstraexperimental';
+import { ThrowStmt } from '@angular/compiler';
 
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
@@ -24,14 +25,33 @@ export class GridComponent implements OnInit {
 
   ngOnInit(): void {
     //generates the nodes for the grid
-    this.generateGrid();
+    //this.generateGrid();
+    this.generateTwoDimensionalGrid();
+  }
+
+  generateTwoDimensionalGrid(){
+    for(let row: number = 0; row <= 26; row++){
+      const currentRow = [];
+      for(let column: number = 0; column < 58; column++){
+        if(row == 13 && column == 10){
+          currentRow.push(new Node(row+column, true, false, false, false, row, column));
+        }
+        else if(row == 13 && column == 48){
+          currentRow.push(new Node(row+column, false, true, false, false, row, column));
+        }
+        else{
+          currentRow.push(new Node(row+column, false, false,  false, false, row, column));
+        }
+      }
+      GRID_NODES.push(currentRow);
+    }
   }
 
   generateGrid(){
     let index: number = 0;
     for(var row: number = 0; row <= 26; row++){
       console.log(row);
-      for(var column: number = 0; column < 58; column++){
+      for(var column: number = 0; column < 69; column++){
         if(row == 13 && column == 10){
           GRID_NODES.push(new Node(index, true, false, false, false, row, column));
           console.log('Start Index: ' + index);
@@ -66,22 +86,22 @@ export class GridComponent implements OnInit {
 
   visualizeAlgorithm(){
     if(this.algorithm == 'Dijkstra'){
-      const startNode = this.nodes[764];
-      const endNode = this.nodes[802];
+      const startNode = this.nodes[13][10];
+      const endNode = this.nodes[13][48];
       const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
       const shortestPath = createShortestPath(endNode);
       this.animateAlgorithm(visitedNodes, shortestPath);
     }
     else if(this.algorithm == 'A*'){
-      const startNode = this.nodes[764];
-      const endNode = this.nodes[802];
+      const startNode = this.nodes[13][10];
+      const endNode = this.nodes[13][48];
       const visitedNodes = aStar(this.nodes, startNode, endNode, 'euklidean');
       const shortestPath = retraceShortestPath(endNode);
       this.animateAlgorithm(visitedNodes, shortestPath);
     }
-    else if(this.algorithm == 'Experimental'){
-      const startNode = this.nodes[764];
-      const endNode = this.nodes[802];
+    else if(this.algorithm == 'Alt-Dijkstra'){
+      const startNode = this.nodes[13][10];
+      const endNode = this.nodes[13][48];
       const visitedNodes = executeExperimental(this.nodes, startNode, endNode);
       const shortestPath = createShortestPath(endNode);
       this.animateAlgorithm(visitedNodes, shortestPath);
@@ -128,48 +148,52 @@ export class GridComponent implements OnInit {
     }
   }
 
-  toggleWall(index: number){
-    if((this.nodes[index].isStart || this.nodes[index].isEnd)){
+  toggleWall(row: number, column: number){
+    if((this.nodes[row][column].isStart || this.nodes[row][column].isEnd)){
       console.log('Cannot toggle wall!');
       return;
     }
     else if(isRunning){}
     else{
-        this.nodes[index].isWall = !this.nodes[index].isWall;
+        this.nodes[row][column].isWall = !this.nodes[row][column].isWall;
     }
-    console.log('ROW: ' + this.nodes[index].row + ' COLUMN: ' + this.nodes[index].column + ' INDEX: '+ index);
+    console.log('ROW: ' + this.nodes[row][column].row + ' COLUMN: ' + this.nodes[row][column].column);
   }
 
-  toggleStart(index: number){
+  toggleStart(row: number, column: number){
     for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].isStart){
-        this.nodes[i].isStart = false;
+      for(let j = 0; j < this.nodes[i].length; j++){
+        if(this.nodes[i].isStart){
+          this.nodes[i].isStart = false;
+        }
+      } 
+    }
+    this.nodes[row][column].isStart = true;
+  }
+
+  toggleEnd(row: number, column: number){
+    for(let i = 0; i < this.nodes.length; i++){
+      for(let j = 0; j < this.nodes[i].length; j++){
+        if(this.nodes[i].isEnd){
+          this.nodes[i].isEnd = false;
+        }
       }
     }
-    this.nodes[index].isStart = true;
+    this.nodes[row][column].isEnd = true;
   }
 
-  toggleEnd(index: number){
-    for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].isEnd){
-        this.nodes[i].isEnd = false;
-      }
-    }
-    this.nodes[index].isEnd = true;
-  }
-
-  mouseDown(index: number){
+  mouseDown(row?: number, col?: number){
     mouseIsPressed = true;
     console.log('Mouse down');
   }
 
-  mouseOver(index: number){
+  mouseOver(row: number, column: number){
     if(mouseIsPressed){
-      this.toggleWall(index);
+      this.toggleWall(row, column);
     }
   }
 
-  mouseUp(index: number){
+  mouseUp(row?: number, column?: number){
     mouseIsPressed = false;
     console.log('Mouse up');
   }
@@ -178,8 +202,10 @@ export class GridComponent implements OnInit {
     if(isRunning)
       return;
     for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].isWall)
-        this.nodes[i].isWall = false;
+      for(let j = 0; j < this.nodes[i].length; j++){
+        if(this.nodes[i][j].isWall)
+        this.nodes[i][j].isWall = false;
+      }
     }
   }
 
@@ -187,10 +213,12 @@ export class GridComponent implements OnInit {
     if(isRunning)
       return;
     for(let i = 0; i < this.nodes.length; i++){
-      this.nodes[i].isWall = false;
-      this.nodes[i].isVisited = false;
-      this.nodes[i].isActuallyVisited = false;
-      this.nodes[i].isShortestPath = false;
+      for(let j = 0; j < this.nodes[i].length; j++){
+        this.nodes[i][j].isWall = false;
+        this.nodes[i][j].isVisited = false;
+        this.nodes[i][j].isActuallyVisited = false;
+        this.nodes[i][j].isShortestPath = false;
+      }
     }
   }
 
@@ -198,11 +226,13 @@ export class GridComponent implements OnInit {
     if(isRunning)
       return;
     for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].isActuallyVisited || this.nodes[i].isVisited || this.nodes[i].closed){
-        this.nodes[i].isVisited = false;
-        this.nodes[i].isActuallyVisited = false;
-        this.nodes[i].isShortestPath = false;
-        this.nodes[i].closed = false;
+      for(let j = 0; j < this.nodes[i].length; j++){
+        if(this.nodes[i][j].isActuallyVisited || this.nodes[i][j].isVisited || this.nodes[i][j].closed){
+          this.nodes[i][j].isVisited = false;
+          this.nodes[i][j].isActuallyVisited = false;
+          this.nodes[i][j].isShortestPath = false;
+          this.nodes[i][j].closed = false;
+        }
       }
     }
   }
@@ -215,16 +245,19 @@ export class GridComponent implements OnInit {
 
   checkVisited(){
     for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].isActuallyVisited)
+      for(let j = 0; j < this.nodes[i].length; j++){
+        if(this.nodes[i][j].isActuallyVisited)
         return true;
+      }
     }
     return false;
   }
 
   checkClosed(){
     for(let i = 0; i < this.nodes.length; i++){
-      if(this.nodes[i].closed){
-        return true;
+      for(let j = 0; j < this.nodes[i].length; j++){
+        if(this.nodes[i][j].closed)
+          return true;
       }
     }
     return false;

@@ -1,7 +1,7 @@
 <header>
 <div class="navbar-container">
-    <span class="title">Pathfinding Visualizer</span>
-    <nav class="navmenu-brand">
+    <a href="#" class="title">Pathfinder</a>
+    <nav>
         <ul>
             <li class="algorithms">
                 <div class= dropdown>
@@ -9,7 +9,7 @@
                     <div class="dropdown-content">
                         <a (click)="setPathfindingAlgorithm('Dijkstra')" href="#">Dijkstra</a>
                         <a (click)="setPathfindingAlgorithm('A*')" href="#">A*</a>
-                        <a (click)="setPathfindingAlgorithm('Experimental')" href="#">Experimental Dijkstra</a>
+                        <a (click)="setPathfindingAlgorithm('Alt-Dijkstra')" href="#">Alt-Dijkstra</a>
                     </div>
                 </div>
             </li>
@@ -23,14 +23,14 @@
                 </div>
             </li>
             <li class="visualize"><button id="btn-visualize" (click)="checkAlgorithm()" class="btn-visualize">Visualize!</button></li>
-            <li class="clearBoard"><button (click)="clearBoard()" class="btn-clearBoard">Clear Board</button></li>
-            <li class="clearWalls"><button (click)="clearWalls()" class="btn-clearWalls">Clear Walls</button></li>
+            <li class="clearBoard"><button id="btn-clearBoard" (click)="clearBoard()" class="btn-clearBoard">Clear Board</button></li>
+            <li class="clearWalls"><button id="btn-clearWalls" (click)="clearWalls()" class="btn-clearWalls">Clear Walls</button></li>
         </ul>
     </nav>
 </div>
 </header>
 
-<div class="grid-container">
+<!--<div class="grid-container">
     <span *ngFor="let node of nodes; index as i;">
         <div [ngClass]="{
             'isStart': node.isStart,
@@ -45,4 +45,26 @@
         (mouseup)="mouseUp(i)">
         </div>
     </span>
+</div>-->
+
+<div class="container">
+    <table class="grid">
+        <tr *ngFor="let rows of nodes; index as row;">
+            <td *ngFor="let node of rows; index as col;"
+            (click)="toggleWall(row, col)"
+            (mousedown)="mouseDown(row, col)"
+            (mouseenter)="mouseOver(row, col)"
+            (mouseup)="mouseUp(row, col)">
+                <div [ngClass]="{
+                    'isStart': node.isStart,
+                    'isEnd': node.isEnd,
+                    'isWall': node.isWall,
+                    'isVisited': node.isActuallyVisited,
+                    'isShortestPath': node.isShortestPath,
+                    'node': true
+                    }" id="node.id">
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
