@@ -51,9 +51,10 @@
     <table class="grid">
         <tr *ngFor="let rows of nodes; index as row;">
             <td *ngFor="let node of rows; index as col;"
-            (click)="toggleWall(row, col)"
+            
             (mousedown)="mouseDown(row, col)"
-            (mouseenter)="mouseOver(row, col)"
+            (mouseenter)="mouseEnter(row, col)"
+            (mouseleave)="mouseLeave(row, col)"
             (mouseup)="mouseUp(row, col)">
                 <div [ngClass]="{
                     'isStart': node.isStart,

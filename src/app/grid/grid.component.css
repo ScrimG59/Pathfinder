@@ -253,79 +253,79 @@ button:hover{
   }
 }
 
-@media screen and (max-width: 1760px){
+@media screen and (max-width: 1900px){
   .node{
     width: 24px;
   }
 }
 
-@media screen and (max-width: 1700px){
+@media screen and (max-width: 1840px){
   .node{
     width: 23px;
   }
 }
 
-@media screen and (max-width: 1640px){
+@media screen and (max-width: 1780px){
   .node{
     width: 22px;
   }
 }
 
-@media screen and (max-width: 1580px){
+@media screen and (max-width: 1700px){
   .node{
     width: 21px;
   }
 }
 
-@media screen and (max-width: 1520px){
+@media screen and (max-width: 1630px){
   .node{
     width: 20px;
   }
 }
 
-@media screen and (max-width: 1460px){
+@media screen and (max-width: 1555px){
   .node{
     width: 19px;
   }
 }
 
-@media screen and (max-width: 1400px){
+@media screen and (max-width: 1475px){
   .node{
     width: 18px;
   }
 }
 
-@media screen and (max-width: 1340px){
+@media screen and (max-width: 1425px){
   .node{
     width: 17px;
   }
 }
 
-@media screen and (max-width: 1280px){
+@media screen and (max-width: 1375px){
   .node{
     width: 16px;
   }
 }
 
-@media screen and (max-width: 1220px){
+@media screen and (max-width: 1325px){
   .node{
     width: 15px;
   }
 }
 
-@media screen and (max-width: 1160px){
+@media screen and (max-width: 1275px){
   .node{
     width: 14px;
   }
 }
 
-@media screen and (max-width: 1100px){
+@media screen and (max-width: 1225px){
   .node{
     width: 13px;
   }
 }
 
-@media screen and (max-width: 1040px){
+@media screen and (max-width: 1175px){
   .node{
     width: 12px;
   }
@@ -333,7 +333,7 @@ button:hover{
 
 /* GRID-TABLE */
 .container{
-  margin-left: 165px;
+  margin-left: 12px;
 }
 
 table{

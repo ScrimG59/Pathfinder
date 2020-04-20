@@ -30,18 +30,20 @@ export class GridComponent implements OnInit {
   }
 
   generateTwoDimensionalGrid(){
+    let index: number = 0;
     for(let row: number = 0; row <= 26; row++){
       const currentRow = [];
-      for(let column: number = 0; column < 58; column++){
+      for(let column: number = 0; column < 69; column++){
         if(row == 13 && column == 10){
-          currentRow.push(new Node(row+column, true, false, false, false, row, column));
+          currentRow.push(new Node(index, true, false, false, false, row, column));
         }
         else if(row == 13 && column == 48){
-          currentRow.push(new Node(row+column, false, true, false, false, row, column));
+          currentRow.push(new Node(index, false, true, false, false, row, column));
         }
         else{
-          currentRow.push(new Node(row+column, false, false,  false, false, row, column));
+          currentRow.push(new Node(index, false, false,  false, false, row, column));
         }
+        index++;
       }
       GRID_NODES.push(currentRow);
     }
@@ -160,36 +162,37 @@ export class GridComponent implements OnInit {
     console.log('ROW: ' + this.nodes[row][column].row + ' COLUMN: ' + this.nodes[row][column].column);
   }
 
-  toggleStart(row: number, column: number){
-    for(let i = 0; i < this.nodes.length; i++){
-      for(let j = 0; j < this.nodes[i].length; j++){
-        if(this.nodes[i].isStart){
-          this.nodes[i].isStart = false;
-        }
-      } 
-    }
+  setStart(row: number, column: number){
     this.nodes[row][column].isStart = true;
   }
 
-  toggleEnd(row: number, column: number){
-    for(let i = 0; i < this.nodes.length; i++){
-      for(let j = 0; j < this.nodes[i].length; j++){
-        if(this.nodes[i].isEnd){
-          this.nodes[i].isEnd = false;
-        }
-      }
-    }
+  deleteStart(row: number, column: number){
+    this.nodes[row][column].isStart = false;
+  }
+
+  setEnd(row: number, column: number){
     this.nodes[row][column].isEnd = true;
+  }
+
+  deleteEnd(row: number, column: number){
+    this.nodes[row][column].isEnd = false;
   }
 
   mouseDown(row?: number, col?: number){
     mouseIsPressed = true;
+    this.toggleWall(row, col);
     console.log('Mouse down');
   }
 
-  mouseOver(row: number, column: number){
+  mouseEnter(row: number, column: number){
     if(mouseIsPressed){
       this.toggleWall(row, column);
+    }
+  }
+
+  mouseLeave(row: number, column: number){
+    if(mouseIsPressed){
+      
     }
   }
 
