@@ -25,6 +25,7 @@ export function aStar(grid: Node[][], startNode: Node, endNode: Node, heuristic:
         // we found the end node
         if(currentNode.isEnd){
             console.log('Found end node!');
+            closedList.push(currentNode);
             return closedList;
         }
 
@@ -129,6 +130,6 @@ export function retraceShortestPath(endNode: Node){
         
         currentNode = currentNode.parentNode;
     }
-    console.log('[DIJKSTRA] LENGTH: ' + shortestPath.length);
+    console.log('[A*] LENGTH: ' + shortestPath.length);
     return shortestPath;
 }

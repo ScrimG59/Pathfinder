@@ -51,7 +51,6 @@
     <table class="grid">
         <tr *ngFor="let rows of nodes; index as row;">
             <td *ngFor="let node of rows; index as col;"
-            
             (mousedown)="mouseDown(row, col)"
             (mouseenter)="mouseEnter(row, col)"
             (mouseleave)="mouseLeave(row, col)"
