@@ -6,6 +6,7 @@ import { executeExperimental } from '../algorithms/pathfinding/dijkstraexperimen
 
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
+let animationSpeed = 20;
 let mouseIsPressed = false;
 let startIsMoving = false;
 let endIsMoving = false;
@@ -152,7 +153,7 @@ export class GridComponent implements OnInit {
           console.log('[GRID] Shortest Path: ' + shortestPath.length);
           console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
           this.animateShortestPath(shortestPath);
-        }, i * 20);
+        }, i * animationSpeed);
         return;
       }
       setTimeout(() => {
@@ -160,7 +161,7 @@ export class GridComponent implements OnInit {
         else{
           visitedNodes[i].isActuallyVisited = true;
         }
-      }, i * 20);
+      }, i * animationSpeed);
     }
   }
 
@@ -181,7 +182,7 @@ export class GridComponent implements OnInit {
         shortestPath[i].isActuallyVisited = false;
         if(shortestPath[i].isEnd){}
         else {shortestPath[i].isShortestPath = true;}
-      }, i * 40);
+      }, i * animationSpeed);
     }
   }
 
@@ -198,22 +199,26 @@ export class GridComponent implements OnInit {
   }
 
   setStart(row: number, column: number){
+    if(isRunning){return;}
     this.nodes[row][column].isStart = true;
     startCoordiantes.set('Row', row);
     startCoordiantes.set('Col', column);
   }
 
   deleteStart(row: number, column: number){
+    if(isRunning){return;}
     this.nodes[row][column].isStart = false;
   }
 
   setEnd(row: number, column: number){
+    if(isRunning){return;}
     this.nodes[row][column].isEnd = true;
     endCoordinates.set('Row', row);
     endCoordinates.set('Col', column);
   }
 
   deleteEnd(row: number, column: number){
+    if(isRunning){return;}
     this.nodes[row][column].isEnd = false;
   }
 
@@ -236,9 +241,15 @@ export class GridComponent implements OnInit {
       this.toggleWall(row, column);
     }
     else if(mouseIsPressed && startIsMoving){
+      if(this.nodes[row][column].isWall){
+        this.toggleWall(row, column);
+      }
       this.setStart(row, column);
     }
     else if(mouseIsPressed && endIsMoving){
+      if(this.nodes[row][column].isWall){
+        this.toggleWall(row, column);
+      }
       this.setEnd(row, column);
     }
     else{}
@@ -304,6 +315,24 @@ export class GridComponent implements OnInit {
     this.algorithm = algorithm;
     document.getElementById('btn-visualize').textContent = `Visualize ${this.algorithm}!`;
     console.log(this.algorithm);
+  }
+
+  setSpeed(speed: string): void{
+    switch(speed){
+      case "Very Fast":
+        animationSpeed = 5;
+        break;
+      case "Fast":
+        animationSpeed = 10;
+      case "Normal":
+        animationSpeed = 20;
+        break;
+      case "Slow":
+        animationSpeed = 40;
+        break;
+      case "Very Slow":
+        animationSpeed = 60;
+    }
   }
 
   checkVisited(): boolean{

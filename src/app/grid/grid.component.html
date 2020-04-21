@@ -25,32 +25,28 @@
             <li class="visualize"><button id="btn-visualize" (click)="checkAlgorithm()" class="btn-visualize">Visualize!</button></li>
             <li class="clearBoard"><button id="btn-clearBoard" (click)="clearBoard()" class="btn-clearBoard">Clear Board</button></li>
             <li class="clearWalls"><button id="btn-clearWalls" (click)="clearWalls()" class="btn-clearWalls">Clear Walls</button></li>
+            <li class="speed">
+                <div class= dropdown>
+                    <button class="dropbtn">Speed of Animation</button>
+                    <div class="dropdown-content">
+                        <a (click)="setSpeed('Very Fast')" href="#">Very Fast</a>
+                        <a (click)="setSpeed('Fast')" href="#">Fast</a>
+                        <a (click)="setSpeed('Normal')" href="#">Normal</a>
+                        <a (click)="setSpeed('Slow')" href="#">Slow</a>
+                        <a (click)="setSpeed('Very Slow')" href="#">Very Slow</a>
+                    </div>
+                </div>
+            </li>
         </ul>
     </nav>
 </div>
 </header>
 
-<!--<div class="grid-container">
-    <span *ngFor="let node of nodes; index as i;">
-        <div [ngClass]="{
-            'isStart': node.isStart,
-            'isEnd': node.isEnd,
-            'isWall': node.isWall,
-            'isVisited': node.isActuallyVisited,
-            'isShortestPath': node.isShortestPath,
-            'node': true
-        }" id="i" (click)="toggleWall(i)"
-        (mousedown)="mouseDown(i)"
-        (mouseenter)="mouseOver(i)"
-        (mouseup)="mouseUp(i)">
-        </div>
-    </span>
-</div>-->
-
 <div class="container">
     <table class="grid">
         <tr *ngFor="let rows of nodes; index as row;">
             <td *ngFor="let node of rows; index as col;"
+            draggable="false"
             (mousedown)="mouseDown(row, col)"
             (mouseenter)="mouseEnter(row, col)"
             (mouseleave)="mouseLeave(row, col)"
