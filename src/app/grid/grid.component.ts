@@ -182,7 +182,7 @@ export class GridComponent implements OnInit {
         shortestPath[i].isActuallyVisited = false;
         if(shortestPath[i].isEnd){}
         else {shortestPath[i].isShortestPath = true;}
-      }, i * animationSpeed);
+      }, i * animationSpeed*2);
     }
   }
 
