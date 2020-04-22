@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { filter } from 'rxjs/operators';
+import { DijkstraDialogComponent } from '../dijkstra-dialog/dijkstra-dialog.component';
+
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
 import { aStar, retraceShortestPath } from '../algorithms/pathfinding/astar';
 import { executeExperimental } from '../algorithms/pathfinding/dijkstraexperimental';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
+import { generateRandomMaze } from '../algorithms/maze/randomMaze';
+
 
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
@@ -21,8 +28,11 @@ let endCoordinates = new Map();
 })
 
 export class GridComponent implements OnInit {
+
+  dijkstraDialog: MatDialogRef<DijkstraDialogComponent>;
+  exampleArray = [];
   
-  constructor() {}
+  constructor(private dijkstra: MatDialog) {}
 
   nodes = GRID_NODES;
   algorithm = ALGORITHM;
@@ -30,7 +40,7 @@ export class GridComponent implements OnInit {
   ngOnInit(): void {
     //generates the nodes for the grid
     this.generateTwoDimensionalGrid();
-    // setting the default start node and end node
+    // setting the default coordinates for start node and end node
     startCoordiantes.set('Row', 13);
     startCoordiantes.set('Col', 10);
     endCoordinates.set('Row', 13);
@@ -146,7 +156,7 @@ export class GridComponent implements OnInit {
     }
   }
 
-  animateAlgorithm(visitedNodes: Node[], shortestPath?: Node[]){
+  animateAlgorithm(visitedNodes: Node[], shortestPath: Node[]){
     for(let i = 0; i <= visitedNodes.length; i++){
       if(i == visitedNodes.length){
         setTimeout(() => {
@@ -183,6 +193,33 @@ export class GridComponent implements OnInit {
         if(shortestPath[i].isEnd){}
         else {shortestPath[i].isShortestPath = true;}
       }, i * animationSpeed*2);
+    }
+  }
+
+  visualizeMazeAlgorithm(){
+    if(isRunning) return;
+    console.log("Generating random maze...");
+    this.clearBoard();
+    isRunning = true;
+    const walls = generateRandomMaze(this.nodes);
+    this.animateMazeAlgorithm(walls);
+  }
+
+  animateMazeAlgorithm(walls: Node[]){
+    console.log("Animating random maze...");
+    for(let i = 0; i <= walls.length; i++){
+      if(i == walls.length){
+        isRunning = false;
+        document.getElementById('btn-visualize').style.backgroundColor = '#0398f4';
+        setTimeout(() => {
+          document.getElementById('btn-visualize').textContent = 'Visualize!'
+        }, 1500);
+        document.getElementById('btn-visualize').textContent = 'Done!'
+        return;
+      }
+      setTimeout(() => {
+        walls[i].isWall = true;
+      }, i * 10);
     }
   }
 
@@ -312,6 +349,7 @@ export class GridComponent implements OnInit {
   }
 
   setPathfindingAlgorithm(algorithm: string): void{
+    //this.openDijkstraDialog();
     this.algorithm = algorithm;
     document.getElementById('btn-visualize').textContent = `Visualize ${this.algorithm}!`;
     console.log(this.algorithm);
@@ -365,5 +403,14 @@ export class GridComponent implements OnInit {
     else{
       return false;
     }
+  }
+
+  openDijkstraDialog(){
+    this.dijkstraDialog = this.dijkstra.open(DijkstraDialogComponent, {
+      hasBackdrop: false
+    });
+
+    this.dijkstraDialog.afterClosed().pipe(filter(name => name)).subscribe(name => this.exampleArray.push(name));
+    console.log(this.exampleArray[0]);
   }
 }
