@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { filter } from 'rxjs/operators';
-import { DijkstraDialogComponent } from '../dijkstra-dialog/dijkstra-dialog.component';
 
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
 import { aStar, retraceShortestPath } from '../algorithms/pathfinding/astar';
 import { executeExperimental } from '../algorithms/pathfinding/dijkstraexperimental';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { generateRandomMaze } from '../algorithms/maze/randomMaze';
 
 
@@ -29,7 +26,6 @@ let endCoordinates = new Map();
 
 export class GridComponent implements OnInit {
 
-  dijkstraDialog: MatDialogRef<DijkstraDialogComponent>;
   exampleArray = [];
   
   constructor(private dijkstra: MatDialog) {}
@@ -403,14 +399,5 @@ export class GridComponent implements OnInit {
     else{
       return false;
     }
-  }
-
-  openDijkstraDialog(){
-    this.dijkstraDialog = this.dijkstra.open(DijkstraDialogComponent, {
-      hasBackdrop: false
-    });
-
-    this.dijkstraDialog.afterClosed().pipe(filter(name => name)).subscribe(name => this.exampleArray.push(name));
-    console.log(this.exampleArray[0]);
   }
 }

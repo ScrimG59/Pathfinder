@@ -42,6 +42,36 @@
 </div>
 </header>
 
+<table class="options-container" cellspacing="0" cellpading="0">
+    <tr>
+        <th>General</th>
+        <th>Heuristics</th>
+        <th>Statistics</th>
+    </tr>
+    <tr>
+        <td>
+            <input id="checkbox" type="checkbox"><label class="diagonalLabel" for="checkbox">Allow Diagonal</label>
+        </td>
+        <td>
+            <input id="checkbox" type="checkbox"><label class="diagonalLabel" for="checkbox">Euclidean</label>
+        </td>
+        <td>
+            <p id="visitedNodesStats">Visited Nodes: 0</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="checkbox" type="checkbox"><label class="diagonalLabel" for="checkbox">Allow Bidirectional</label>
+        </td>
+        <td>
+            <input id="checkbox" type="checkbox"><label class="diagonalLabel" for="checkbox">Manhattan</label>
+        </td>
+        <td>
+            <p id="shortestPathStats">Length of shortest path: 0</p>
+        </td>
+    </tr>
+</table>
+
 <div class="container">
     <table class="grid">
         <tr *ngFor="let rows of nodes; index as row;">

@@ -9,14 +9,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { GridComponent } from './grid/grid.component';
-import { DijkstraDialogComponent } from './dijkstra-dialog/dijkstra-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     GridComponent,
-    DijkstraDialogComponent
   ],
   imports: [
     BrowserModule,
