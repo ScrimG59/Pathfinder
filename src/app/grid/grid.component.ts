@@ -101,6 +101,7 @@ export class GridComponent implements OnInit {
       else{
         const shortestPath = createShortestPath(endNode);
         this.animateAlgorithm(visitedNodes, shortestPath);
+        this.setStatistics(visitedNodes, shortestPath);
       }
     }
     else if(this.algorithm == 'A*'){
@@ -125,6 +126,7 @@ export class GridComponent implements OnInit {
       else{
         const shortestPath = retraceShortestPath(endNode);
         this.animateAlgorithm(visitedNodes, shortestPath);
+        this.setStatistics(visitedNodes, shortestPath);
       }
     }
     else if(this.algorithm == 'Alt-Dijkstra'){
@@ -148,6 +150,7 @@ export class GridComponent implements OnInit {
       else {
         const shortestPath = createShortestPath(endNode);
         this.animateAlgorithm(visitedNodes, shortestPath);
+        this.setStatistics(visitedNodes, shortestPath);
       }
     }
   }
@@ -327,6 +330,14 @@ export class GridComponent implements OnInit {
         this.nodes[i][j].isShortestPath = false;
       }
     }
+    this.resetStatistics();
+  }
+
+  resetStatistics(): void{
+    document.getElementById('visitedNodes').style.color = 'white';
+    document.getElementById('shortestPath').style.color = 'white';
+    document.getElementById('visitedNodes').textContent = '0';
+    document.getElementById('shortestPath').textContent = '0';
   }
 
   clearVisitedNodes(): void{
@@ -342,6 +353,7 @@ export class GridComponent implements OnInit {
         }
       }
     }
+    this.resetStatistics();
   }
 
   setPathfindingAlgorithm(algorithm: string): void{
@@ -366,6 +378,28 @@ export class GridComponent implements OnInit {
         break;
       case "Very Slow":
         animationSpeed = 60;
+    }
+  }
+
+  setStatistics(visitedNodes: Node[], shortestPath: Node[]): void{
+    for(let i = 0; i <= visitedNodes.length; i++){
+      if(i == visitedNodes.length){
+        setTimeout(() => {
+          for(let j = 0; j < shortestPath.length; j++){
+            setTimeout(() => {
+              document.getElementById('visitedNodes').style.color = '#0398f4';
+              document.getElementById('shortestPath').style.color = 'yellow';
+              document.getElementById('shortestPath').textContent = `${j}`;
+            }, j * animationSpeed*2);
+          }
+        }, i * animationSpeed);
+      }
+      else{
+        setTimeout(() => {
+          document.getElementById('visitedNodes').style.color = '#ff0000';
+          document.getElementById('visitedNodes').textContent = `${i-1}`;
+        }, i * animationSpeed);
+      }
     }
   }
 
