@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
@@ -10,6 +9,7 @@ import { generateRandomMaze } from '../algorithms/maze/randomMaze';
 
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
+let distance = 'euclidean';
 let animationSpeed = 20;
 let mouseIsPressed = false;
 let startIsMoving = false;
@@ -28,7 +28,7 @@ export class GridComponent implements OnInit {
 
   exampleArray = [];
   
-  constructor(private dijkstra: MatDialog) {}
+  constructor() {}
 
   nodes = GRID_NODES;
   algorithm = ALGORITHM;
@@ -41,9 +41,11 @@ export class GridComponent implements OnInit {
     startCoordiantes.set('Col', 10);
     endCoordinates.set('Row', 13);
     endCoordinates.set('Col', 58);
+    // setting the default checkboxes
+    this.setHeuristicCheckboxes();
   }
 
-  generateTwoDimensionalGrid(){
+  generateTwoDimensionalGrid(): void{
     let index: number = 0;
     for(let row: number = 0; row <= 26; row++){
       const currentRow = [];
@@ -63,7 +65,7 @@ export class GridComponent implements OnInit {
     }
   }
 
-  checkAlgorithm(){
+  checkAlgorithm(): void{
     if(isRunning) return;
     if(this.algorithm == 'nothing'){
       document.getElementById('btn-visualize').textContent = "Pick an algortihm!"
@@ -79,7 +81,7 @@ export class GridComponent implements OnInit {
     }
   }
 
-  visualizeAlgorithm(){
+  visualizeAlgorithm(): void{
     if(this.algorithm == 'Dijkstra'){
       const startRow = startCoordiantes.get('Row');
       const startCol = startCoordiantes.get('Col');
@@ -111,7 +113,7 @@ export class GridComponent implements OnInit {
       const endRow = endCoordinates.get('Row');
       const endCol = endCoordinates.get('Col');
       const endNode = this.nodes[endRow][endCol];
-      const visitedNodes = aStar(this.nodes, startNode, endNode, 'euklidean');
+      const visitedNodes = aStar(this.nodes, startNode, endNode, distance);
       console.log('VISITED NODES:' + visitedNodes.length);
       if(!this.checkIfFound(visitedNodes)){
         setTimeout(() => {
@@ -397,10 +399,30 @@ export class GridComponent implements OnInit {
       else{
         setTimeout(() => {
           document.getElementById('visitedNodes').style.color = '#ff0000';
-          document.getElementById('visitedNodes').textContent = `${i-1}`;
+          document.getElementById('visitedNodes').textContent = `${i}`;
         }, i * animationSpeed);
       }
     }
+  }
+
+  setHeuristicCheckboxes(): void{
+    if(distance == 'euclidean'){
+      let euclideanCheckbox = document.getElementById('euclidean') as HTMLInputElement;
+      let manhattanCheckbox = document.getElementById('manhattan') as HTMLInputElement;
+      euclideanCheckbox.checked = true;
+      manhattanCheckbox.checked = false;
+    }
+    else{
+      let euclideanCheckbox = document.getElementById('euclidean') as HTMLInputElement;
+      let manhattanCheckbox = document.getElementById('manhattan') as HTMLInputElement;
+      euclideanCheckbox.checked = false;
+      manhattanCheckbox.checked = true;
+    }
+  }
+
+  setHeuristicDistance(heuristic: string): void{
+    distance = heuristic;
+    this.setHeuristicCheckboxes();
   }
 
   checkVisited(): boolean{

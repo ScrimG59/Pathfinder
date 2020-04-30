@@ -56,7 +56,7 @@ export function aStar(grid: Node[][], startNode: Node, endNode: Node, heuristic:
                 // if it's the first time visiting the node, the gscore is the best (at least for the moment)
                 isBestG = true;
                 // get the heuristic distance 
-                neighbor.h = getHeuristicDistance(neighbor, endNode);
+                neighbor.h = getHeuristicDistance(neighbor, endNode, heuristic);
                 // add the current neighbor to the openList
                 openList.push(neighbor);
             }
@@ -112,10 +112,19 @@ function getNeighbors(grid: Node[][], currentNode: Node): Node[]{
     return neighbors;
 }
 
-function getHeuristicDistance(currentNode: Node, endNode: Node): number{
-    const result = Math.sqrt(Math.pow((currentNode.row - endNode.row), 2) + Math.pow((currentNode.column - endNode.column), 2));
-    console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
-    return result;
+function getHeuristicDistance(currentNode: Node, endNode: Node, heuristic: string): number{
+    if(heuristic == 'euclidean'){
+        const result = Math.sqrt(Math.pow((currentNode.row - endNode.row), 2) + Math.pow((currentNode.column - endNode.column), 2));
+        console.log('Euclidean Distance as heuristic');
+        console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
+        return result;
+    }
+    else{
+        const result = Math.abs(currentNode.row - endNode.row) + Math.abs(currentNode.column - endNode.column);
+        console.log('Manhattan Distance as heuristic');
+        console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
+        return result;
+    }
 }
 
 export function retraceShortestPath(endNode: Node){
