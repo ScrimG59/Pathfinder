@@ -138,7 +138,7 @@ export class GridComponent implements OnInit {
       const endRow = endCoordinates.get('Row');
       const endCol = endCoordinates.get('Col');
       const endNode = this.nodes[endRow][endCol];
-      const visitedNodes = executeExperimental(this.nodes, startNode, endNode);
+      const visitedNodes = executeExperimental(this.nodes, startNode, endNode, distance);
       if(!this.checkIfFound(visitedNodes)){
         setTimeout(() => {
           document.getElementById('btn-visualize').textContent = 'Visualize!';

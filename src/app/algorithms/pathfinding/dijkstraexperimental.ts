@@ -1,6 +1,6 @@
 import {Node} from '../../../models/node';
 
-    export function executeExperimental(grid: Node[][], startNode: Node, endNode: Node){
+    export function executeExperimental(grid: Node[][], startNode: Node, endNode: Node, heuristic: string){
         let visitedNodes = [];
         let unvisitedNodes = [];
         // initialize 
@@ -9,11 +9,11 @@ import {Node} from '../../../models/node';
             for(let j = 0; j < grid[i].length; j++){
                 if(grid[i][j].isStart){
                     grid[i][j].distance = 0;
-                    grid[i][j].h = getHeuristicDistance(grid[i][j], endNode);
+                    grid[i][j].h = getHeuristicDistance(grid[i][j], endNode, heuristic);
                 }
                 else{
                     grid[i][j].distance = Infinity;
-                    grid[i][j].h = getHeuristicDistance(grid[i][j], endNode);
+                    grid[i][j].h = getHeuristicDistance(grid[i][j], endNode, heuristic);
                 }
                 grid[i][j].parentNode = null;
             }
@@ -64,10 +64,19 @@ import {Node} from '../../../models/node';
         return nodes;
     }
 
-    function getHeuristicDistance(currentNode: Node, endNode: Node): number{
-        const result = Math.sqrt(Math.pow((currentNode.row - endNode.row), 2) + Math.pow((currentNode.column - endNode.column), 2));
-        console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
-        return result;
+    function getHeuristicDistance(currentNode: Node, endNode: Node, heuristic: string): number{
+        if(heuristic == 'euclidean'){
+            const result = Math.sqrt(Math.pow((currentNode.row - endNode.row), 2) + Math.pow((currentNode.column - endNode.column), 2));
+            console.log('Euclidean Distance as heuristic');
+            console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
+            return result;
+        }
+        else{
+            const result = Math.abs(currentNode.row - endNode.row) + Math.abs(currentNode.column - endNode.column);
+            console.log('Manhattan Distance as heuristic');
+            console.log(`CurrentNode: ${currentNode.row} ${currentNode.column}, EndNode: ${endNode.row} ${endNode.column}, HeuristicDistance: ${result}`);
+            return result;
+        }
     }
 
     function updateUnvisitedNeighbors(grid: Node[][], currentNode: Node): void{
