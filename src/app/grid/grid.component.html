@@ -42,15 +42,15 @@
 </div>
 </header>
 
-<table class="options-container" cellspacing="0" cellpading="0">
+<table class="options-container">
     <tr>
         <th>General</th>
         <th>Heuristics</th>
-        <th>Statistics</th>
+        <th class="stats">Statistics</th>
     </tr>
     <tr>
         <td>
-            <input id="diagonal" type="checkbox"><label class="diagonalLabel" for="checkbox">Allow Diagonal</label>
+            <input id="diagonal" type="checkbox" (click)="setDiagonalCheckbox()"><label class="diagonalLabel" for="checkbox">Diagonal</label>
         </td>
         <td>
             <input id="euclidean" type="checkbox" (click)="setHeuristicDistance('euclidean')"><label class="diagonalLabel" for="checkbox">Euclidean</label>
@@ -61,13 +61,13 @@
     </tr>
     <tr>
         <td>
-            <input id="bidirectional" type="checkbox"><label class="diagonalLabel" for="checkbox">Allow Bidirectional</label>
+            <input id="bidirectional" type="checkbox"><label class="diagonalLabel" for="checkbox">Bidirectional</label>
         </td>
         <td>
             <input id="manhattan" type="checkbox" (click)="setHeuristicDistance('manhattan')"><label class="diagonalLabel" for="checkbox">Manhattan</label>
         </td>
         <td>
-            <p id="shortestPathStats">Length of shortest path: <label id="shortestPath">0</label></p>
+            <p id="shortestPathStats">Shortest path: <label id="shortestPath">0</label></p>
         </td>
     </tr>
 </table>

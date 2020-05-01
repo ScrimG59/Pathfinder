@@ -5,7 +5,7 @@ header{
   width: 100%;
   height: 100%;
   background-color: #222;
-  margin-bottom: 8em;
+  /*margin-bottom: 8em;*/
 }
 
 header::after{
@@ -26,7 +26,7 @@ header::after{
   color: white;
   cursor: default;
   text-decoration: none;
-  margin-left: 10px;
+  margin-left: 0.5vw;
 }
 
 .title:hover{
@@ -146,8 +146,8 @@ button:hover{
 /* OPTIONS */
 
 th{
-  padding-right: 30em;
-  padding-bottom: 10px;
+  padding-right: 20vw;
+  padding-bottom: 0.5vh;
   color: #0398f4;
 }
 
@@ -156,10 +156,15 @@ td{
   padding: 0;
   border-spacing: 0;
 }
+
+.stats{
+  margin-bottom: 1vh;
+}
+
 .options-container{
   position: absolute;
-  top: 8.5%;
-  left: 12%;
+  top: 8.8%;
+  left: 20%;
   color: white;
   border-collapse: separate;
   border-spacing: 0;
@@ -452,6 +457,10 @@ input:checked[type="checkbox"]:after{
   .node{
     width: 6px;
   }
+
+  .options-container{
+    left: 1%;
+  }
 }
 
 @media screen and (max-width: 700px){
@@ -462,7 +471,8 @@ input:checked[type="checkbox"]:after{
 
 /* GRID-TABLE */
 .container{
-  margin-left: 12px;
+  margin-top: 13vh;
+  margin-left: 0.75vw;
 }
 
 .grid{

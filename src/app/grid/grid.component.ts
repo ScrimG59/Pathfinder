@@ -10,6 +10,8 @@ import { generateRandomMaze } from '../algorithms/maze/randomMaze';
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
 let distance = 'euclidean';
+let diagonal = false;
+let bidirectional = false;
 let animationSpeed = 20;
 let mouseIsPressed = false;
 let startIsMoving = false;
@@ -43,6 +45,7 @@ export class GridComponent implements OnInit {
     endCoordinates.set('Col', 58);
     // setting the default checkboxes
     this.setHeuristicCheckboxes();
+    this.setDiagonalCheckbox();
   }
 
   generateTwoDimensionalGrid(): void{
@@ -89,7 +92,7 @@ export class GridComponent implements OnInit {
       const endRow = endCoordinates.get('Row');
       const endCol = endCoordinates.get('Col');
       const endNode = this.nodes[endRow][endCol];
-      const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
+      const visitedNodes = executeDijkstra(this.nodes, startNode, endNode, diagonal);
       if(!this.checkIfFound(visitedNodes)){
         setTimeout(() => {
           document.getElementById('btn-visualize').textContent = 'Visualize!';
@@ -209,6 +212,7 @@ export class GridComponent implements OnInit {
   animateMazeAlgorithm(walls: Node[]){
     console.log("Animating random maze...");
     for(let i = 0; i <= walls.length; i++){
+      setTimeout(() => {
       if(i == walls.length){
         isRunning = false;
         document.getElementById('btn-visualize').style.backgroundColor = '#0398f4';
@@ -218,7 +222,6 @@ export class GridComponent implements OnInit {
         document.getElementById('btn-visualize').textContent = 'Done!'
         return;
       }
-      setTimeout(() => {
         walls[i].isWall = true;
       }, i * 10);
     }
@@ -383,6 +386,17 @@ export class GridComponent implements OnInit {
     }
   }
 
+  setDiagonalCheckbox(): void{
+    let diagonalCheckbox = document.getElementById('diagonal') as HTMLInputElement;
+
+    if(diagonalCheckbox.checked){
+      diagonal = true;
+    }
+    else {
+      diagonal = false;
+    }
+  }
+
   setStatistics(visitedNodes: Node[], shortestPath: Node[]): void{
     for(let i = 0; i <= visitedNodes.length; i++){
       if(i == visitedNodes.length){
@@ -406,15 +420,14 @@ export class GridComponent implements OnInit {
   }
 
   setHeuristicCheckboxes(): void{
+    let euclideanCheckbox = document.getElementById('euclidean') as HTMLInputElement;
+    let manhattanCheckbox = document.getElementById('manhattan') as HTMLInputElement;
+
     if(distance == 'euclidean'){
-      let euclideanCheckbox = document.getElementById('euclidean') as HTMLInputElement;
-      let manhattanCheckbox = document.getElementById('manhattan') as HTMLInputElement;
       euclideanCheckbox.checked = true;
       manhattanCheckbox.checked = false;
     }
     else{
-      let euclideanCheckbox = document.getElementById('euclidean') as HTMLInputElement;
-      let manhattanCheckbox = document.getElementById('manhattan') as HTMLInputElement;
       euclideanCheckbox.checked = false;
       manhattanCheckbox.checked = true;
     }
