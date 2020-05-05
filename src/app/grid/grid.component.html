@@ -42,6 +42,7 @@
 </div>
 </header>
 
+<div class="options">
 <table class="options-container">
     <tr>
         <th>General</th>
@@ -71,8 +72,9 @@
         </td>
     </tr>
 </table>
+</div>
 
-<div class="container">
+<div class="grid-container">
     <table class="grid">
         <tr *ngFor="let rows of nodes; index as row;">
             <td *ngFor="let node of rows; index as col;"
