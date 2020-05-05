@@ -6,6 +6,7 @@ export class Node{
     isEnd: boolean;
     isWall: boolean;
     isVisited: boolean;
+    isDiagonal: boolean;
     distance: number;
     //###########
     // for astar algo
@@ -32,5 +33,6 @@ export class Node{
         this.isShortestPath = false;
         this.isActuallyVisited = false;
         this.closed = false;
+        this.isDiagonal = false;
     }
 }
