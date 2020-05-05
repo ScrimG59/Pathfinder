@@ -4,7 +4,6 @@ import {Node} from '../../../models/node';
         let visitedNodes = [];
         let unvisitedNodes = [];
         // initialize 
-        //initialize(grid, visitedNodes, unvisitedNodes);
         for(let i: number = 0; i < grid.length; i++){
             for(let j = 0; j < grid[i].length; j++){
                 if(grid[i][j].isStart){
@@ -43,9 +42,6 @@ import {Node} from '../../../models/node';
             // push the current node into an array of already visited nodes
             if(currentNode.isEnd){
                 console.log('End node reached!!');
-                return visitedNodes;
-            }
-            if(currentNode.id == endNode.id){
                 return visitedNodes;
             }
             console.log('updating neighbors')
