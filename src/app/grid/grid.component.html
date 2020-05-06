@@ -51,10 +51,10 @@
     </tr>
     <tr>
         <td>
-            <input id="diagonal" type="checkbox" (click)="setDiagonalCheckbox()"><label class="diagonalLabel" for="checkbox">Diagonal</label>
+            <input id="showProcess" type="checkbox" (click)="setShowProcessCheckbox()"><label class="checkboxLabel" for="checkbox">Show Process</label>
         </td>
         <td>
-            <input id="euclidean" type="checkbox" (click)="setHeuristicDistance('euclidean')"><label class="diagonalLabel" for="checkbox">Euclidean</label>
+            <input id="euclidean" type="checkbox" (click)="setHeuristicDistance('euclidean')"><label class="checkboxLabel" for="checkbox">Euclidean</label>
         </td>
         <td>
             <p id="visitedNodesStats">Visited Nodes: <label id="visitedNodes">0</label></p>
@@ -62,10 +62,10 @@
     </tr>
     <tr>
         <td>
-            <input id="bidirectional" type="checkbox"><label class="diagonalLabel" for="checkbox">Bidirectional</label>
+            <input id="bidirectional" type="checkbox"><label class="checkboxLabel" for="checkbox">Bidirectional</label>
         </td>
         <td>
-            <input id="manhattan" type="checkbox" (click)="setHeuristicDistance('manhattan')"><label class="diagonalLabel" for="checkbox">Manhattan</label>
+            <input id="manhattan" type="checkbox" (click)="setHeuristicDistance('manhattan')"><label class="checkboxLabel" for="checkbox">Manhattan</label>
         </td>
         <td>
             <p id="shortestPathStats">Shortest path: <label id="shortestPath">0</label></p>

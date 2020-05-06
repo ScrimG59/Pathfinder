@@ -222,7 +222,7 @@ input:checked[type="checkbox"]:after{
   box-shadow: 0 0 5px #13b3ff, 0 0 15px #13b3ff;
 }
 
-.diagonalLabel{
+.checkboxLabel{
   padding-left: 10px;
 }
 
@@ -473,7 +473,7 @@ input:checked[type="checkbox"]:after{
 /* GRID-TABLE */
 .grid-container{
   margin-top: 13vh;
-  margin-left: 0.75vw;
+  margin-left: 1.4vw;
 }
 
 .grid{

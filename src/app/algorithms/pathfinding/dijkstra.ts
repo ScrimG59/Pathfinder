@@ -1,6 +1,6 @@
 import {Node} from '../../../models/node';
 
-    export function executeDijkstra(grid: Node[][], startNode: Node, endNode: Node, diagonal: boolean){
+    export function executeDijkstra(grid: Node[][], startNode: Node, endNode: Node){
         let visitedNodes = [];
         let unvisitedNodes = [];
         // initialize 
@@ -48,7 +48,7 @@ import {Node} from '../../../models/node';
             }
             console.log('updating neighbors')
             // update the unvisited neighbors
-            updateUnvisitedNeighbors(grid, currentNode, diagonal);
+            updateUnvisitedNeighbors(grid, currentNode);
         }
     }
 
@@ -142,15 +142,9 @@ import {Node} from '../../../models/node';
         return neighbors.filter(neighbor => !neighbor.isVisited);
     }*/
 
-    function updateUnvisitedNeighbors(grid: Node[][], currentNode: Node, diagonal: boolean): void{
+    function updateUnvisitedNeighbors(grid: Node[][], currentNode: Node): void{
         // get all unvisited neighbors of the current node
-        let unvisitedNeighbors;
-        if(diagonal){
-            //unvisitedNeighbors = getUnvisitedDiagonalNeighbors(grid, currentNode);
-        }
-        else {
-            unvisitedNeighbors = getUnvisitedNeighbors(grid, currentNode);
-        }
+        const unvisitedNeighbors = getUnvisitedNeighbors(grid, currentNode);
         // for each unvisited neighbor set the distance to the current node's distance + 1
         // +1 because the distance between the current node and the neighbor is 1
         // also set the neighbors "previousNode"-property to the current node

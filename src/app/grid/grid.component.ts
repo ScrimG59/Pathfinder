@@ -10,8 +10,7 @@ import { generateRandomMaze } from '../algorithms/maze/randomMaze';
 const GRID_NODES = [];
 let ALGORITHM = "nothing";
 let distance = 'euclidean';
-let diagonal = false;
-let bidirectional = false;
+let showProcess = true;
 let animationSpeed = 20;
 let mouseIsPressed = false;
 let startIsMoving = false;
@@ -45,7 +44,7 @@ export class GridComponent implements OnInit {
     endCoordinates.set('Col', 58);
     // setting the default checkboxes
     this.setHeuristicCheckboxes();
-    this.setDiagonalCheckbox();
+    this.initShowProcessCheckbox();
   }
 
   generateTwoDimensionalGrid(): void{
@@ -92,7 +91,7 @@ export class GridComponent implements OnInit {
       const endRow = endCoordinates.get('Row');
       const endCol = endCoordinates.get('Col');
       const endNode = this.nodes[endRow][endCol];
-      const visitedNodes = executeDijkstra(this.nodes, startNode, endNode, diagonal);
+      const visitedNodes = executeDijkstra(this.nodes, startNode, endNode);
       if(!this.checkIfFound(visitedNodes)){
         setTimeout(() => {
           document.getElementById('btn-visualize').textContent = 'Visualize!';
@@ -105,8 +104,8 @@ export class GridComponent implements OnInit {
       }
       else{
         const shortestPath = createShortestPath(endNode);
-        this.animateAlgorithm(visitedNodes, shortestPath);
-        this.setStatistics(visitedNodes, shortestPath);
+        this.animateAlgorithm(visitedNodes, shortestPath, showProcess);
+        this.setStatistics(visitedNodes, shortestPath, showProcess);
       }
     }
     else if(this.algorithm == 'A*'){
@@ -130,8 +129,8 @@ export class GridComponent implements OnInit {
       }
       else{
         const shortestPath = retraceShortestPath(endNode);
-        this.animateAlgorithm(visitedNodes, shortestPath);
-        this.setStatistics(visitedNodes, shortestPath);
+        this.animateAlgorithm(visitedNodes, shortestPath, showProcess);
+        this.setStatistics(visitedNodes, shortestPath, showProcess);
       }
     }
     else if(this.algorithm == 'Alt-Dijkstra'){
@@ -154,28 +153,33 @@ export class GridComponent implements OnInit {
       }
       else {
         const shortestPath = createShortestPath(endNode);
-        this.animateAlgorithm(visitedNodes, shortestPath);
-        this.setStatistics(visitedNodes, shortestPath);
+        this.animateAlgorithm(visitedNodes, shortestPath, showProcess);
+        this.setStatistics(visitedNodes, shortestPath, showProcess);
       }
     }
   }
 
-  animateAlgorithm(visitedNodes: Node[], shortestPath: Node[]){
-    for(let i = 0; i <= visitedNodes.length; i++){
-      if(i == visitedNodes.length){
-        setTimeout(() => {
-          console.log('[GRID] Shortest Path: ' + shortestPath.length);
-          console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
-          this.animateShortestPath(shortestPath);
-        }, i * animationSpeed);
-        return;
-      }
-      setTimeout(() => {
-        if(visitedNodes[i].isStart || visitedNodes[i].isEnd){}
-        else{
-          visitedNodes[i].isActuallyVisited = true;
+  animateAlgorithm(visitedNodes: Node[], shortestPath: Node[], showProcess: boolean){
+    if(showProcess){
+      for(let i = 0; i <= visitedNodes.length; i++){
+        if(i == visitedNodes.length){
+          setTimeout(() => {
+            console.log('[GRID] Shortest Path: ' + shortestPath.length);
+            console.log('[GRID]: ' + shortestPath[0].row + ' ' + shortestPath[0].column);
+            this.animateShortestPath(shortestPath);
+          }, i * animationSpeed);
+          return;
         }
-      }, i * animationSpeed);
+        setTimeout(() => {
+          if(visitedNodes[i].isStart || visitedNodes[i].isEnd){}
+          else{
+            visitedNodes[i].isActuallyVisited = true;
+          }
+        }, i * animationSpeed);
+      }
+    }
+    else{
+      this.animateShortestPath(shortestPath);
     }
   }
 
@@ -386,35 +390,54 @@ export class GridComponent implements OnInit {
     }
   }
 
-  setDiagonalCheckbox(): void{
-    let diagonalCheckbox = document.getElementById('diagonal') as HTMLInputElement;
+  initShowProcessCheckbox(): void{
+    const showProcessCheckbox = document.getElementById('showProcess') as HTMLInputElement;
+    showProcess = true;
+    showProcessCheckbox.checked = true;
 
-    if(diagonalCheckbox.checked){
-      diagonal = true;
+  }
+
+  setShowProcessCheckbox(): void{
+    const showProcessCheckbox = document.getElementById('showProcess') as HTMLInputElement;
+
+    if(showProcessCheckbox.checked){
+      showProcess = true;
+      console.log(showProcess);
     }
     else {
-      diagonal = false;
+      showProcess = false;
+      console.log(showProcess);
     }
   }
 
-  setStatistics(visitedNodes: Node[], shortestPath: Node[]): void{
-    for(let i = 0; i <= visitedNodes.length; i++){
-      if(i == visitedNodes.length){
-        setTimeout(() => {
-          for(let j = 0; j < shortestPath.length; j++){
-            setTimeout(() => {
-              document.getElementById('visitedNodes').style.color = '#0398f4';
-              document.getElementById('shortestPath').style.color = 'yellow';
-              document.getElementById('shortestPath').textContent = `${j}`;
-            }, j * animationSpeed*2);
-          }
-        }, i * animationSpeed);
+  setStatistics(visitedNodes: Node[], shortestPath: Node[], showProcess: boolean): void{
+    if(showProcess){
+      for(let i = 0; i <= visitedNodes.length; i++){
+        if(i == visitedNodes.length){
+          setTimeout(() => {
+            for(let j = 0; j < shortestPath.length; j++){
+              setTimeout(() => {
+                document.getElementById('visitedNodes').style.color = '#0398f4';
+                document.getElementById('shortestPath').style.color = 'yellow';
+                document.getElementById('shortestPath').textContent = `${j}`;
+              }, j * animationSpeed*2);
+            }
+          }, i * animationSpeed);
+        }
+        else{
+          setTimeout(() => {
+            document.getElementById('visitedNodes').style.color = '#ff0000';
+            document.getElementById('visitedNodes').textContent = `${i}`;
+          }, i * animationSpeed);
+        }
       }
-      else{
+    }
+    else{
+      for(let i = 0; i < shortestPath.length; i++){
         setTimeout(() => {
-          document.getElementById('visitedNodes').style.color = '#ff0000';
-          document.getElementById('visitedNodes').textContent = `${i}`;
-        }, i * animationSpeed);
+          document.getElementById('shortestPath').style.color = 'yellow';
+          document.getElementById('shortestPath').textContent = `${i}`;
+        }, i * animationSpeed*2);
       }
     }
   }
@@ -441,7 +464,7 @@ export class GridComponent implements OnInit {
   checkVisited(): boolean{
     for(let i = 0; i < this.nodes.length; i++){
       for(let j = 0; j < this.nodes[i].length; j++){
-        if(this.nodes[i][j].isActuallyVisited)
+        if(this.nodes[i][j].isActuallyVisited && this.nodes[i][j].isShortestPath)
         return true;
       }
     }
