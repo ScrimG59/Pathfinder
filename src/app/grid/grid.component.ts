@@ -492,4 +492,11 @@ export class GridComponent implements OnInit {
       return false;
     }
   }
+
+  toggleSlideMenu():void{
+    const slideMenu = document.querySelector('.slideMenu');
+
+    slideMenu.classList.toggle('slideMenu-active');
+    console.log(slideMenu.classList);
+  }
 }

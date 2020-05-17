@@ -1,8 +1,7 @@
 <header>
-<div class="navbar-container">
-    <a href="#" class="title">Pathfinder</a>
     <nav>
-        <ul>
+        <a href="#" class="title"><span class="titleName">Pathfinder</span></a>
+        <ul class="nav-links">
             <li class="algorithms">
                 <div class= dropdown>
                     <button class="dropbtn">Algorithms</button>
@@ -38,9 +37,34 @@
                 </div>
             </li>
         </ul>
+        <div class="burger" (click)="toggleSlideMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
     </nav>
-</div>
 </header>
+
+<div class="slideMenu">
+    <ul class="navLinks">
+        <li class="slideMenuTitle">Algorithms</li>
+        <li (click)="setPathfindingAlgorithm('Dijkstra')" class="item">Dijkstra</li>
+        <li (click)="setPathfindingAlgorithm('A*')" class="item">A*</li>
+        <li (click)="setPathfindingAlgorithm('Alt-Dijkstra')" class="item">Alt-Dijkstra</li>
+        <li class="slideMenuTitle">Mazes</li>
+        <li (click)="visualizeMazeAlgorithm()" class="item">Random Maze</li>
+        <li class="item">To be continued...</li>
+        <li (click)="checkAlgorithm()" class="slideMenuVisualize">Visualize</li>
+        <li (click)="clearBoard()" class="slideMenuClear">Clear Board</li>
+        <li (click)="clearWalls()" class="slideMenuClear">Clear Walls</li>
+        <li class="slideMenuTitle">Speed of Animation</li>
+        <li (click)="setSpeed('Very Fast')" class="item">Very Fast</li>
+        <li (click)="setSpeed('Fast')" class="item">Fast</li>
+        <li (click)="setSpeed('Normal')" class="item">Normal</li>
+        <li (click)="setSpeed('Slow')" class="item">Slow</li>
+        <li (click)="setSpeed('Very Slow')" class="item">Very Slow</li>
+    </ul>
+</div>
 
 <div class="options">
 <table class="options-container">

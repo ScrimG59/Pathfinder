@@ -1,9 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule} from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,10 +17,8 @@ import { GridComponent } from './grid/grid.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule
+    MatTooltipModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
