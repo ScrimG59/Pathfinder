@@ -479,6 +479,7 @@ export class GridComponent implements OnInit {
     return false;
   }
 
+  // checks if the given algorithm found the final node
   checkIfFound(visitedNodes: Node[]): boolean{
     if(visitedNodes.length == 0){
       return false;
@@ -493,8 +494,10 @@ export class GridComponent implements OnInit {
 
   toggleSlideMenu():void{
     const slideMenu = document.querySelector('.slideMenu');
+    const burger = document.querySelector('.burger')
 
     slideMenu.classList.toggle('slideMenu-active');
+    burger.classList.toggle('toggle');
     console.log(slideMenu.classList);
   }
 }

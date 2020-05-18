@@ -70,6 +70,19 @@ nav li{
   height: 3px;
   background-color: rgb(226, 226, 226);
   margin: 5px;
+  transition: transform 0.3s ease-out;
+}
+
+.toggle .line1{
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.toggle .line2{
+  opacity: 0;
+}
+
+.toggle .line3{
+  transform: rotate(45deg) translate(-5px, -6px);
 }
 
 .visualize{
