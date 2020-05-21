@@ -77,6 +77,10 @@ export class GridComponent implements OnInit {
       document.getElementById('btn-visualize').style.backgroundColor = '#ff0000';
       this.clearVisitedNodes();
       isRunning = true;
+      const slideMenu = document.querySelector('.slideMenu');
+      if(slideMenu.classList.contains('slideMenu-active')){
+        this.toggleSlideMenu();
+      } 
       this.visualizeAlgorithm();
     }
   }
