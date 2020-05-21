@@ -171,12 +171,8 @@ td{
   border-spacing: 0;
 }
 
-.stats{
-  margin-bottom: 1vh;
-}
-
 .options-container{
-  position: absolute;
+  position: relative;
   top: 8.8%;
   left: 20%;
   color: white;
@@ -581,7 +577,7 @@ input:checked[type="checkbox"]:after{
 
 /* GRID-TABLE */
 .grid-container{
-  margin-top: 13vh;
+  margin-top: -0.5vh;
   margin-left: 1.4vw;
   padding-bottom: 0.9vh;
 }
