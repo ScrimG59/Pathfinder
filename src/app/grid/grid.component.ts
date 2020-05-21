@@ -338,6 +338,14 @@ export class GridComponent implements OnInit {
       }
     }
     this.resetStatistics();
+    const currentStartRow = startCoordiantes.get('Row');
+    const currentStartCol = startCoordiantes.get('Col');
+    const currentEndRow = endCoordinates.get('Row');
+    const currentEndCol = endCoordinates.get('Col');
+    this.deleteStart(currentStartRow, currentStartCol);
+    this.deleteEnd(currentEndRow, currentEndCol);
+    this.setStart(13, 10);
+    this.setEnd(13, 58);
   }
 
   resetStatistics(): void{
