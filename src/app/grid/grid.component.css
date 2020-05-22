@@ -373,7 +373,7 @@ input:checked[type="checkbox"]:after{
   .slideMenu{
     position: absolute;
     right: 0px;
-    height: 92.55vh;
+    height: 100%;
     top: 8.5vh;
     background-color: #191f26;;
     display: flex;
@@ -385,6 +385,7 @@ input:checked[type="checkbox"]:after{
     overflow-x: hidden;
     transition: transform 0.5s ease-in;
     color: rgba(226, 226, 226);
+    overflow-y: hidden;
   }
 
   .navLinks{
