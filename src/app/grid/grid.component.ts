@@ -16,6 +16,7 @@ let mouseIsPressed = false;
 let startIsMoving = false;
 let endIsMoving = false;
 let isRunning = false;
+let isWall = false;
 let startCoordiantes = new Map();
 let endCoordinates = new Map();
 
@@ -290,12 +291,14 @@ export class GridComponent implements OnInit {
     else if(mouseIsPressed && startIsMoving){
       if(this.nodes[row][column].isWall){
         this.toggleWall(row, column);
+        isWall = true;
       }
       this.setStart(row, column);
     }
     else if(mouseIsPressed && endIsMoving){
       if(this.nodes[row][column].isWall){
         this.toggleWall(row, column);
+        isWall = true;
       }
       this.setEnd(row, column);
     }
@@ -310,6 +313,10 @@ export class GridComponent implements OnInit {
       this.deleteEnd(row, column);
     }
     else {}
+    if(isWall){
+      this.toggleWall(row, column);
+      isWall = false;
+    }
   }
 
   mouseUp(row?: number, column?: number){
