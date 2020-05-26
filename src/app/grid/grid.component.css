@@ -283,17 +283,17 @@ input:checked[type="checkbox"]:after{
 @keyframes wallAnimation {
   0% {
     transform: scale(0.6);
-    background-color: rgb(199, 198, 198);
+    background-color: rgb(226, 226, 226);
   }
 
   50% {
     transform: scale(1.3);
-    background-color: rgb(199, 198, 198);
+    background-color: rgb(226, 226, 226);
   }
 
   100% {
     transform: scale(1);
-    background-color: rgb(199, 198, 198);
+    background-color: rgb(226, 226, 226);
   }
 }
 
@@ -356,6 +356,7 @@ input:checked[type="checkbox"]:after{
     background-color: yellow;
   }
 }
+
 @media screen and (max-width: 1180px){
   .nav-links{
     display: none;
