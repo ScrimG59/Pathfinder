@@ -19,6 +19,7 @@ let isRunning = false;
 let isWall = false;
 let startCoordiantes = new Map();
 let endCoordinates = new Map();
+let lastPosition = new Map();
 
 @Component({
   selector: 'app-grid',
@@ -48,6 +49,7 @@ export class GridComponent implements OnInit {
     this.initShowProcessCheckbox();
   }
 
+  // generates a two-dimensional grid
   generateTwoDimensionalGrid(): void{
     let index: number = 0;
     for(let row: number = 0; row <= 26; row++){
@@ -68,6 +70,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // method that checks if there's a algorithm selected and if there's is one, it calls the visualizeAlgorithm-method
   checkAlgorithm(): void{
     if(isRunning) return;
     if(this.algorithm == 'nothing'){
@@ -86,6 +89,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // method that prepares everything for the animation-algorithm
   visualizeAlgorithm(): void{
     if(this.algorithm == 'Dijkstra'){
       const startRow = startCoordiantes.get('Row');
@@ -162,6 +166,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // animates the selected algorithm
   animateAlgorithm(visitedNodes: Node[], shortestPath: Node[], showProcess: boolean){
     if(showProcess){
       for(let i = 0; i <= visitedNodes.length; i++){
@@ -186,6 +191,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // animates the shortest path
   animateShortestPath(shortestPath: Node[]){
     for(let i = 0; i <= shortestPath.length; i++){
       setTimeout(() => {
@@ -207,6 +213,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // method that checks some constraints and calls the animation-method
   visualizeMazeAlgorithm(){
     if(isRunning) return;
     console.log("Generating random maze...");
@@ -216,6 +223,7 @@ export class GridComponent implements OnInit {
     this.animateMazeAlgorithm(walls);
   }
 
+  // method that animates the maze algorithms
   animateMazeAlgorithm(walls: Node[]){
     console.log("Animating random maze...");
     for(let i = 0; i <= walls.length; i++){
@@ -234,6 +242,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // helper method to set or delete a wall node
   toggleWall(row: number, column: number){
     if((this.nodes[row][column].isStart || this.nodes[row][column].isEnd)){
       console.log('Cannot toggle wall!');
@@ -246,6 +255,7 @@ export class GridComponent implements OnInit {
     console.log('ROW: ' + this.nodes[row][column].row + ' COLUMN: ' + this.nodes[row][column].column);
   }
 
+  // sets the start node
   setStart(row: number, column: number){
     if(isRunning){return;}
     this.nodes[row][column].isStart = true;
@@ -253,11 +263,13 @@ export class GridComponent implements OnInit {
     startCoordiantes.set('Col', column);
   }
 
+  // deletes the start node
   deleteStart(row: number, column: number){
     if(isRunning){return;}
     this.nodes[row][column].isStart = false;
   }
 
+  // sets the end node
   setEnd(row: number, column: number){
     if(isRunning){return;}
     this.nodes[row][column].isEnd = true;
@@ -265,11 +277,15 @@ export class GridComponent implements OnInit {
     endCoordinates.set('Col', column);
   }
 
+  // deletes the end node
   deleteEnd(row: number, column: number){
     if(isRunning){return;}
     this.nodes[row][column].isEnd = false;
   }
 
+  /* 
+  ######## These are all the mouse events that handle things like dragging and moving nodes ######### 
+  */
   mouseDown(row: number, col: number){
     mouseIsPressed = true;
     if(this.nodes[row][col].isStart){
@@ -293,23 +309,44 @@ export class GridComponent implements OnInit {
         this.toggleWall(row, column);
         isWall = true;
       }
-      this.setStart(row, column);
+      if(this.nodes[row][column].isEnd){
+        this.setStart(lastPosition.get('Row'), lastPosition.get('Col'));
+      }
+      else{
+
+        this.setStart(row, column);
+      }
     }
     else if(mouseIsPressed && endIsMoving){
       if(this.nodes[row][column].isWall){
         this.toggleWall(row, column);
         isWall = true;
       }
-      this.setEnd(row, column);
+      if(this.nodes[row][column].isStart){
+        this.setEnd(lastPosition.get('Row'), lastPosition.get('Col'));
+      }
+      else{
+        this.setEnd(row, column);
+      }
     }
     else{}
   }
 
   mouseLeave(row: number, column: number){
-    if(mouseIsPressed && startIsMoving){
+    if(mouseIsPressed && startIsMoving && this.nodes[row][column].isEnd){
+      this.deleteStart(lastPosition.get('Row'), lastPosition.get('Col'));
+    }
+    else if(mouseIsPressed && startIsMoving){
+      lastPosition.set('Row', row);
+      lastPosition.set('Col', column);
       this.deleteStart(row, column);   
     }
+    else if(mouseIsPressed && endIsMoving && this.nodes[row][column].isStart){
+      this.deleteEnd(lastPosition.get('Row'), lastPosition.get('Col'));
+    }
     else if(mouseIsPressed && endIsMoving){
+      lastPosition.set('Row', row);
+      lastPosition.set('Col', column);
       this.deleteEnd(row, column);
     }
     else {}
@@ -326,6 +363,11 @@ export class GridComponent implements OnInit {
     console.log('Mouse up');
   }
 
+  /*
+  #########################################################
+  */
+
+  // deletes all wall nodes of the grid
   clearWalls(): void{
     if(isRunning)
       return;
@@ -337,6 +379,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // deletes everything of the grid except the start and end node
   clearBoard(): void{
     if(isRunning)
       return;
@@ -359,6 +402,7 @@ export class GridComponent implements OnInit {
     this.setEnd(13, 58);
   }
 
+  // resets the statistics of the options
   resetStatistics(): void{
     document.getElementById('visitedNodes').style.color = 'white';
     document.getElementById('shortestPath').style.color = 'white';
@@ -366,6 +410,7 @@ export class GridComponent implements OnInit {
     document.getElementById('shortestPath').textContent = '0';
   }
 
+  // deletes every visited node from any previous algorithm
   clearVisitedNodes(): void{
     if(isRunning)
       return;
@@ -382,6 +427,7 @@ export class GridComponent implements OnInit {
     this.resetStatistics();
   }
 
+  // helper method to set an selected algorithm
   setPathfindingAlgorithm(algorithm: string): void{
     //this.openDijkstraDialog();
     this.algorithm = algorithm;
@@ -389,6 +435,7 @@ export class GridComponent implements OnInit {
     console.log(this.algorithm);
   }
 
+  // helper method that sets the speed of animation
   setSpeed(speed: string): void{
     switch(speed){
       case "Very Fast":
@@ -407,6 +454,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // helper method that sets the initial state of the show-process checkbox
   initShowProcessCheckbox(): void{
     const showProcessCheckbox = document.getElementById('showProcess') as HTMLInputElement;
     showProcess = true;
@@ -414,6 +462,7 @@ export class GridComponent implements OnInit {
 
   }
 
+  // helper method that handles the show-process checkbox
   setShowProcessCheckbox(): void{
     const showProcessCheckbox = document.getElementById('showProcess') as HTMLInputElement;
 
@@ -427,6 +476,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // sets the statistics in real time 
   setStatistics(visitedNodes: Node[], shortestPath: Node[], showProcess: boolean): void{
     if(showProcess){
       for(let i = 0; i <= visitedNodes.length; i++){
@@ -459,6 +509,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // sets the heuristic checkboxes according to some constraints
   setHeuristicCheckboxes(): void{
     let euclideanCheckbox = document.getElementById('euclidean') as HTMLInputElement;
     let manhattanCheckbox = document.getElementById('manhattan') as HTMLInputElement;
@@ -473,11 +524,13 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // helper method that sets the selected heuristic internally and also calls the setHeuristicCheckboxed()-method
   setHeuristicDistance(heuristic: string): void{
     distance = heuristic;
     this.setHeuristicCheckboxes();
   }
 
+  // helper method that checks if there are visited nodes in the grid
   checkVisited(): boolean{
     for(let i = 0; i < this.nodes.length; i++){
       for(let j = 0; j < this.nodes[i].length; j++){
@@ -488,6 +541,7 @@ export class GridComponent implements OnInit {
     return false;
   }
 
+  // same helper method as above but for the A*-algorithm
   checkClosed(): boolean{
     for(let i = 0; i < this.nodes.length; i++){
       for(let j = 0; j < this.nodes[i].length; j++){
@@ -511,6 +565,7 @@ export class GridComponent implements OnInit {
     }
   }
 
+  // toggles the side menu at right-hand side of the screen when the viewports width is getting smaller and a burger menu appears
   toggleSlideMenu():void{
     const slideMenu = document.querySelector('.slideMenu');
     const burger = document.querySelector('.burger')
