@@ -1,3 +1,3 @@
 # Pathfinder
 
-A web app visualizing Dijkstra's pathfinding algorithm, A* and also an experimental version of Dijkstra's algorithm made by me, which is a little bit faster than Dijkstra's algorithm and still guarantees the shortest path.
+A web app visualizing Dijkstra's pathfinding algorithm and the A* pathfinding algorithm.
