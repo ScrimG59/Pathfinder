@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import {Node} from '../../models/node';
 import {executeDijkstra, createShortestPath} from '../algorithms/pathfinding/dijkstra';
 import { aStar, retraceShortestPath } from '../algorithms/pathfinding/astar';
-import { executeExperimental } from '../algorithms/pathfinding/dijkstraexperimental';
-import { generateRandomMaze } from '../algorithms/maze/randomMaze';
+import { generateRandomMaze} from '../algorithms/maze/randomMaze';
+import { generateStairMaze} from '../algorithms/maze/stair';
 
 
 const GRID_NODES = [];
@@ -140,30 +140,6 @@ export class GridComponent implements OnInit {
         this.setStatistics(visitedNodes, shortestPath, showProcess);
       }
     }
-    else if(this.algorithm == 'Alt-Dijkstra'){
-      const startRow = startCoordiantes.get('Row');
-      const startCol = startCoordiantes.get('Col');
-      const startNode = this.nodes[startRow][startCol];
-      const endRow = endCoordinates.get('Row');
-      const endCol = endCoordinates.get('Col');
-      const endNode = this.nodes[endRow][endCol];
-      const visitedNodes = executeExperimental(this.nodes, startNode, endNode, distance);
-      if(!this.checkIfFound(visitedNodes)){
-        setTimeout(() => {
-          document.getElementById('btn-visualize').textContent = 'Visualize!';
-          document.getElementById('btn-visualize').style.backgroundColor = '#0398f4';
-        }, 1500);
-        document.getElementById('btn-visualize').textContent = 'No path found!';
-        this.algorithm = 'nothing';
-        isRunning = false;
-        return;
-      }
-      else {
-        const shortestPath = createShortestPath(endNode);
-        this.animateAlgorithm(visitedNodes, shortestPath, showProcess);
-        this.setStatistics(visitedNodes, shortestPath, showProcess);
-      }
-    }
   }
 
   // animates the selected algorithm
@@ -196,11 +172,10 @@ export class GridComponent implements OnInit {
     for(let i = 0; i <= shortestPath.length; i++){
       setTimeout(() => {
         if(i == shortestPath.length){
-          this.algorithm = 'nothing';
           isRunning = false;
           document.getElementById('btn-visualize').style.backgroundColor = '#0398f4';
           setTimeout(() => {
-            document.getElementById('btn-visualize').textContent = 'Visualize!'
+            document.getElementById('btn-visualize').textContent = `Visualize ${this.algorithm}!`
           }, 1500);
           document.getElementById('btn-visualize').textContent = 'Done!'
           return;
@@ -214,31 +189,35 @@ export class GridComponent implements OnInit {
   }
 
   // method that checks some constraints and calls the animation-method
-  visualizeMazeAlgorithm(){
+  visualizeMazeAlgorithm(algo: string){
     if(isRunning) return;
-    console.log("Generating random maze...");
-    this.clearBoard();
-    isRunning = true;
-    const walls = generateRandomMaze(this.nodes);
-    this.animateMazeAlgorithm(walls);
+    if(algo == 'Random'){
+      console.log("Generating random maze...");
+      this.clearBoard();
+      isRunning = true;
+      const walls = generateRandomMaze(this.nodes);
+      this.animateMazeAlgorithm(walls);
+    }
+    else if(algo == 'Stair'){
+      console.log("Generating stair maze...");
+      this.clearBoard();
+      isRunning = true;
+      const walls = generateStairMaze(this.nodes);
+      this.animateMazeAlgorithm(walls);
+    }
   }
 
   // method that animates the maze algorithms
   animateMazeAlgorithm(walls: Node[]){
-    console.log("Animating random maze...");
+    console.log("Animating maze...");
     for(let i = 0; i <= walls.length; i++){
       setTimeout(() => {
       if(i == walls.length){
         isRunning = false;
-        document.getElementById('btn-visualize').style.backgroundColor = '#0398f4';
-        setTimeout(() => {
-          document.getElementById('btn-visualize').textContent = 'Visualize!'
-        }, 1500);
-        document.getElementById('btn-visualize').textContent = 'Done!'
         return;
       }
         walls[i].isWall = true;
-      }, i * 10);
+      }, i * 15);
     }
   }
 

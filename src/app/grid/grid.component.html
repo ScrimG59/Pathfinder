@@ -8,7 +8,6 @@
                     <div class="dropdown-content">
                         <a (click)="setPathfindingAlgorithm('Dijkstra')" href="#">Dijkstra</a>
                         <a (click)="setPathfindingAlgorithm('A*')" href="#">A*</a>
-                        <a (click)="setPathfindingAlgorithm('Alt-Dijkstra')" href="#">Alt-Dijkstra</a>
                     </div>
                 </div>
             </li>
@@ -16,8 +15,8 @@
                 <div class= dropdown>
                     <button class="dropbtn">Mazes ⮟</button>
                     <div class="dropdown-content">
-                        <a (click)="visualizeMazeAlgorithm()" href="#">Random Maze</a>
-                        <a href="#">To be continued...</a>
+                        <a (click)="visualizeMazeAlgorithm('Random')" href="#">Random Maze</a>
+                        <a (click)="visualizeMazeAlgorithm('Stair')" href="#">Basic Stair Pattern</a>
                     </div>
                 </div>
             </li>
@@ -50,10 +49,9 @@
         <li class="slideMenuTitle">Algorithms</li>
         <li (click)="setPathfindingAlgorithm('Dijkstra')" class="item">Dijkstra</li>
         <li (click)="setPathfindingAlgorithm('A*')" class="item">A*</li>
-        <li (click)="setPathfindingAlgorithm('Alt-Dijkstra')" class="item">Alt-Dijkstra</li>
         <li class="slideMenuTitle">Mazes</li>
-        <li (click)="visualizeMazeAlgorithm()" class="item">Random Maze</li>
-        <li class="item">To be continued...</li>
+        <li (click)="visualizeMazeAlgorithm('Random')" class="item">Random Maze</li>
+        <li (click)="visualizeMazeAlgorithm('Stair')" class="item">Basic Stair Pattern</li>
         <li (click)="checkAlgorithm()" class="slideMenuVisualize">Visualize</li>
         <li (click)="clearBoard()" class="slideMenuClear">Clear Board</li>
         <li (click)="clearWalls()" class="slideMenuClear">Clear Walls</li>
