@@ -300,7 +300,7 @@ input:checked[type="checkbox"]:after{
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
-    background-color: red !important;
+  background-color: red !important;
 }
 
 @keyframes endAnimation{

@@ -40,13 +40,18 @@ export class GridComponent implements OnInit {
     //generates the nodes for the grid
     this.generateTwoDimensionalGrid();
     // setting the default coordinates for start node and end node
+    this.setCoordinates();
+    // setting the default checkboxes
+    this.setHeuristicCheckboxes();
+    this.initShowProcessCheckbox();
+  }
+
+  // sets the coordinates of start and end node
+  setCoordinates(): void{
     startCoordiantes.set('Row', 13);
     startCoordiantes.set('Col', 10);
     endCoordinates.set('Row', 13);
     endCoordinates.set('Col', 58);
-    // setting the default checkboxes
-    this.setHeuristicCheckboxes();
-    this.initShowProcessCheckbox();
   }
 
   // generates a two-dimensional grid
