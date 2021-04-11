@@ -1,9 +1,9 @@
-import {Node} from '../../../models/node';
+import { Node } from '../../models/node';
 
-    export function executeDijkstra(grid: Node[][], startNode: Node, endNode: Node){
+    export function executeDijkstra(grid: Node[][]) {
         let visitedNodes = [];
         let unvisitedNodes = [];
-        // initialize 
+        // initialize
         for(let i: number = 0; i < grid.length; i++){
             for(let j = 0; j < grid[i].length; j++){
                 if(grid[i][j].isStart){
@@ -46,13 +46,14 @@ import {Node} from '../../../models/node';
                 console.log('End node reached!!');
                 return visitedNodes;
             }
-            console.log('updating neighbors')
+            console.log('updating neighbors');
+
             // update the unvisited neighbors
             updateUnvisitedNeighbors(grid, currentNode);
         }
     }
 
-    export function getUnvisitedNeighbors(grid: Node[][], currentNode: Node): Node[]{
+    export function getUnvisitedNeighbors(grid: Node[][], currentNode: Node): Node[] {
         const neighbors = [];
         // get the column and row from the current node
         console.log('[DIJKSTRA]: CurrentNode: ' + currentNode.row + ' ' + currentNode.column);
@@ -83,13 +84,13 @@ import {Node} from '../../../models/node';
     }
 
     // UNDER CONSTRUCTION
-    /*export function getUnvisitedDiagonalNeighbors(grid: Node[][], currentNode: Node): Node[]{
+    export function getUnvisitedDiagonalNeighbors(grid: Node[][], currentNode: Node): Node[] {
         const neighbors = [];
         // get the column and row from the current node
         console.log('[DIJKSTRA]: CurrentNode: ' + currentNode.row + ' ' + currentNode.column);
         const column = currentNode.column;
         const row = currentNode.row;
-        let currentNeighbor = null; 
+        let currentNeighbor = null;
         // get the node above
         if(row > 0){
             currentNeighbor = grid[row - 1][column];
@@ -99,7 +100,7 @@ import {Node} from '../../../models/node';
         // get the node diagonally right above
         if(row > 0 && column < 68){
             currentNeighbor = grid[row - 1][column + 1];
-            currentNeighbor.isDiagonal = true; 
+            currentNeighbor.isDiagonal = true;
             neighbors.push(currentNeighbor);
         }
         // get the node on the right
@@ -111,7 +112,7 @@ import {Node} from '../../../models/node';
         // get the node diagonally right below
         if(row < 26 && column < 68){
             currentNeighbor = grid[row + 1][column + 1];
-            currentNeighbor.isDiagonal = true; 
+            currentNeighbor.isDiagonal = true;
             neighbors.push(currentNeighbor);
         }
         // get the node below
@@ -140,9 +141,9 @@ import {Node} from '../../../models/node';
         }
         // only return the neighbors that weren't visited yet
         return neighbors.filter(neighbor => !neighbor.isVisited);
-    }*/
+    }
 
-    function updateUnvisitedNeighbors(grid: Node[][], currentNode: Node): void{
+    function updateUnvisitedNeighbors(grid: Node[][], currentNode: Node): void {
         // get all unvisited neighbors of the current node
         const unvisitedNeighbors = getUnvisitedNeighbors(grid, currentNode);
         // for each unvisited neighbor set the distance to the current node's distance + 1
@@ -160,7 +161,7 @@ import {Node} from '../../../models/node';
         });
     }
 
-    export function getAll(grid: Node[][]): Node[]{
+    export function getAll(grid: Node[][]): Node[] {
         const nodes = [];
         // gets all nodes of the given grid
         for(let i = 0; i < grid.length; i++){
@@ -171,7 +172,7 @@ import {Node} from '../../../models/node';
         return nodes;
     }
 
-    export function createShortestPath(endNode: Node): Node[]{
+    export function createShortestPath(endNode: Node): Node[] {
         const shortestPath = [];
         // set the current node to the end node
         var currentNode = endNode;

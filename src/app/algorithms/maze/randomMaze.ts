@@ -1,4 +1,4 @@
-import { Node } from '../../../models/node';
+import { Node } from '../../models/node';
 
 export function generateRandomMaze(grid: Node[][]): Node[]{
 
@@ -10,7 +10,7 @@ export function generateRandomMaze(grid: Node[][]): Node[]{
             const random = Math.floor(Math.random() * 3.5);
             const currentNode = grid[i][j];
             if(random == 1 && !currentNode.isStart && !currentNode.isEnd)
-                wallNodes.push(currentNode); 
+                wallNodes.push(currentNode);
         }
     }
     return wallNodes;

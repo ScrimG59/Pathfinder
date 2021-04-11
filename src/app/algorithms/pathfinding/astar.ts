@@ -1,4 +1,4 @@
-import { Node } from '../../../models/node';
+import { Node } from '../../models/node';
 
 export function aStar(grid: Node[][], startNode: Node, endNode: Node, heuristic: string){
     // intialize
@@ -44,8 +44,8 @@ export function aStar(grid: Node[][], startNode: Node, endNode: Node, heuristic:
                 console.log(`Neighbor ${neighbor.id} already in the closedList!`);
                 continue;
             }
-            
-            // the gScore is just the distance from the start node to the current node 
+
+            // the gScore is just the distance from the start node to the current node
             let gScore = currentNode.g + 1;
             // this boolean value is helping us to differentiate if it's the most optimal path to the current node
             let isBestG = false;
@@ -55,7 +55,7 @@ export function aStar(grid: Node[][], startNode: Node, endNode: Node, heuristic:
                 console.log(`First time visiting Node ${neighbor.row} ${neighbor.column}`);
                 // if it's the first time visiting the node, the gscore is the best (at least for the moment)
                 isBestG = true;
-                // get the heuristic distance 
+                // get the heuristic distance
                 neighbor.h = getHeuristicDistance(neighbor, endNode, heuristic);
                 // add the current neighbor to the openList
                 openList.push(neighbor);
@@ -88,7 +88,7 @@ function getNeighbors(grid: Node[][], currentNode: Node): Node[]{
     const row = currentNode.row;
     // get the node above
     if(row > 0){
-        var index = 
+        var index =
         neighbors.push(grid[row - 1][column]);
         console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
     }
@@ -107,7 +107,7 @@ function getNeighbors(grid: Node[][], currentNode: Node): Node[]{
         neighbors.push(grid[row][column + 1]);
         console.log('Neighbor: ' + neighbors[neighbors.length-1].row + ' ' + neighbors[neighbors.length-1].column + ' INDEX: ' + neighbors[neighbors.length-1].id);
     }
-    
+
     // only return the neighbors that weren't visited yet
     return neighbors;
 }
@@ -136,7 +136,7 @@ export function retraceShortestPath(endNode: Node){
         // add the current node to the array of nodes for the shortest path
         shortestPath.unshift(currentNode);
         // then set current node to the current node's previous node ==> Backtracking
-        
+
         currentNode = currentNode.parentNode;
     }
     console.log('[A*] LENGTH: ' + shortestPath.length);

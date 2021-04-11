@@ -1,5 +1,3 @@
-import { GridComponent } from 'src/app/grid/grid.component';
-
 export class Node{
     id: number;
     isStart: boolean;
